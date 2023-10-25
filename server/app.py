@@ -48,11 +48,25 @@ class Logout(Resource):
     def delete(self):
         return {"Message":"Logout Successful!"}
     
-    
+class Routes(Resource):
+    def get(self):
+        routes=[
+            {
+                "bus_id":route.bus_id,
+                "start_point":route.start_point,
+                "end_point":route.end_point,
+                "price":route.price,
+                "departure_time":route.departure_time.strftime('%Y-%m-%d %H:%M:%S'),
+                "return_time":route.return_time.strftime('%Y-%m-%d %H:%M:%S') if route.return_time else None
+            }
+            for route in Route.query.all()
+        ]
+        return routes,200
 api.add_resource(Home,'/',endpoint='/')
 api.add_resource(SignUp,'/sign_up',endpoint='/sign_up')
 api.add_resource(Login,'/login',endpoint='/login')
 api.add_resource(Logout,'/logout',endpoint='/logout')
+api.add_resource(Routes,'/routes',endpoint='/routes')
     
     
 
