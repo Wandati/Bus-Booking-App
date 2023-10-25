@@ -4,7 +4,7 @@ from models.bus import Bus
 from models.user import User
 from models.routes import Route
 from flask_restful import Resource
-from flask_jwt_extended import create_access_token,jwt_required
+from flask_jwt_extended import create_access_token,jwt_required,get_jwt_identity
 from flask import jsonify,request
 from werkzeug.security import generate_password_hash,check_password_hash
 class Home(Resource):
