@@ -17,10 +17,11 @@ class SignUp(Resource):
         username=data['username']
         email=data['email']
         password=data['password']
+        user_type=data['user_type']
         if User.query.filter_by(username=username).first() or User.query.filter_by(email=email).first():
             return {"Error":"Username Already Exists"},401
         else:
-            new_user=User(username=username,email=email,password=generate_password_hash(password))
+            new_user=User(username=username,email=email,password=generate_password_hash(password),user_type=user_type)
             db.session.add(new_user)
             db.session.commit()
             return {"Message": "Sign-Up Successful!!"},201
