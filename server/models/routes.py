@@ -8,6 +8,7 @@ class Route(db.Model):
     end_point = db.Column(db.String(50), nullable=False)
     price = db.Column(db.Float,nullable=False)
     departure_time=db.Column(db.DateTime,default=datetime.utcnow())
+    return_time = db.Column(db.DateTime, nullable=True)
     
     @validates('price')
     def validate_price(self,key,price):

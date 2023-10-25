@@ -5,7 +5,8 @@ class Booking(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     bus_id = db.Column(db.Integer, db.ForeignKey('bus.id'), nullable=False)
     seat_number = db.Column(db.Integer, nullable=False)
-    booking_time = db.Column(db.DateTime, nullable=False,default=datetime.utcnow())
+    departure_time = db.Column(db.DateTime, nullable=False,default=datetime.utcnow())
+    return_time = db.Column(db.DateTime, nullable=True)
     is_confirmed = db.Column(db.Boolean, default=False)
     
     
