@@ -6,7 +6,7 @@ function Navbar() {
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
         <Link to="/" className="navbar-brand"> 
-          Bus Booking App
+          BusTrack
         </Link>
         <button
           className="navbar-toggler"
