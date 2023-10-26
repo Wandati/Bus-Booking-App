@@ -1,21 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Home from './components/Home';
-import About from './components/About';
-import Contact from './components/Contact';
-import Signup from './components/Signup';
-import Login from './components/Login';
+import React from "react";
+import ReactDOM from "react-dom/client";
 
 import App from "./App";
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
   <React.StrictMode>
-    <Home />
-    <About />
-    <Contact />
-    <Signup />
-    <Login />
-  </React.StrictMode>,
-
-  document.getElementById('root')
+    <App />
+  </React.StrictMode>
 );
