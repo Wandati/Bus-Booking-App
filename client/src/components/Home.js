@@ -1,30 +1,21 @@
 import React from 'react';
+import './app.css';
+
 
 function Home() {
   return (
-    <div>
-      <h2>Welcome to the Bus Booking App</h2>
-      <p>
-        Book your bus tickets hassle-free with our user-friendly platform.
-        Explore a wide range of routes and find the best deals for your next
-        journey.
-      </p>
-
-      <div className="card" style={{ width: '18rem' }}>
-        <div className="card-body">
-          <h5 className="card-title">Card title</h5>
-          <h6 className="card-subtitle mb-2 text-muted">Card subtitle</h6>
-          <p className="card-text">
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </p>
-          <a href="#" className="card-link">
-            Card link
-          </a>
-          <a href="#" className="card-link">
-            Another link
-          </a>
+    <div className="home-container">
+  <div className="card-container">
+  <div className="card" style={{ width: '100%', height: '100vh' }}>
+      <img src="https://i.ytimg.com/vi/MSPj9fWEQEU/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGE8gWyhlMA8=&rs=AOn4CLAXNT-tIq-yNHzorZLbwV1cVFnX1A" />
+      <div className="card-body">
         </div>
+      </div>
+      </div>
+
+      <div className="booking-form-container">
+        <h2>Booking Form</h2>
+        {/* Add your booking form components here */}
       </div>
     </div>
   );
