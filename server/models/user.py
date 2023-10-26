@@ -9,8 +9,8 @@ class User(db.Model):
     password = db.Column(db.String(60), nullable=False)
     user_type = db.Column(db.String(10), nullable=False,default='Customer')
     
-    bookings=db.relationship('Booking',backref='user')
-    buses=db.relationship('Bus',backref='user')
+    bookings=db.relationship('Booking',backref='user',cascade='all, delete')
+    buses=db.relationship('Bus',backref='user',cascade='all, delete')
     
     @validates('user_type')
     def validate_user_type(self,key,user_type):
