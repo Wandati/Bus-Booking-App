@@ -1,20 +1,40 @@
-// export default function Footer() {
-//   return (
-//     <footer className="bg-dark mt-2 text-white text-center">
-//       <p>&copy;2023.All Rights Reserved</p>
-//       <p>Email us at Nextgen@gmail.com</p>
-//       <p>Call us at 0029230132013</p>
-//     </footer>
-//   );
-// }
-export default function Footer() {
+import React from 'react';
+import { FaRegEnvelope, FaPhoneAlt } from 'react-icons/fa';
+import { AiFillFacebook, AiFillInstagram, AiFillTwitterCircle } from 'react-icons/ai';
+
+const Footer = () => {
   return (
-    <footer class="footer mt-auto py-3 bg-body-tertiary">
-      <div class="container">
-        <span class="text-body-secondary">
-          Place sticky footer content here.
-        </span>
-      </div>
-    </footer>
+    <div className="container">
+      <footer className="footer">
+        <div className="row">
+          <div className="col-md-6">
+            <p>&copy; {new Date().getFullYear()} Your Bus Booking Service. All rights reserved.</p>
+            <p>
+              <FaRegEnvelope /> lawttym@gmail.com
+            </p>
+            <p>
+              <FaPhoneAlt /> +254715749444
+            </p>
+          </div>
+          <div className="col-md-6 text-end">
+            <div className="social-icons">
+              <a href="https://www.facebook.com">
+                <AiFillFacebook />
+              </a>
+
+              <a href="https://www.instagram.com">
+                <AiFillInstagram />
+              </a>
+
+              <a href="https://www.twitter.com">
+                <AiFillTwitterCircle />
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
-}
+};
+
+export default Footer;
