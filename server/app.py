@@ -41,21 +41,234 @@ class Login(Resource):
         
         user=User.query.filter_by(email=email).first()
         if user and check_password_hash(user.password,password):
-            token = create_access_token(identity=user.username)
+            token = create_access_token(identity=user.id)
             return {"Message":"Login Successful!!","token":token},200
         else:
-            return {"Error":"Invalid Username or Password!!"},401
+            return {"Error":"Invalid Email or Password!!"},401
         
 class Logout(Resource):
     @jwt_required()
     def delete(self):
         return {"Message":"Logout Successful!"}
     
+class Users(Resource):
+    @jwt_required()
+    def get(self):
+        user_id=get_jwt_identity()
+        user=User.query.filter_by(id=user_id).first()
+        if not(user.user_type == "Admin"):
+            return {"error":"Unauthorized"},400
+        users=[
+            {
+            "id":user.id,
+            "username":user.username,
+            "email":user.email,
+            "user_type":user.user_type
+            }
+            for user in User.query.all()
+        ]
+        return users,200
+class UsersById(Resource):
+    @jwt_required()
+    def get(self,id):
+        user_id=get_jwt_identity()
+        ad_user=User.query.filter_by(id=user_id).first()
+        if not(ad_user.user_type == "Admin"):
+            return {"error":"Unauthorized"},400
+        query_user=User.query.filter_by(id=id).first()
+        if not query_user:
+            return {"Error":"User does not exist!!"},401
+        elif query_user.user_type == "BusOwner":
+            user_details=[
+                {
+                    
+                    "id":query_user.id,
+                    "username":query_user.username,
+                    "email":query_user.email,
+                    "user_type":query_user.user_type,
+                    "Buses":[
+                        {
+                            "id":bus.id,
+                            "name":bus.name,
+                            "From":Route.query.filter_by(id=bus.route_id).first().start_point,
+                            "To":Route.query.filter_by(id=bus.route_id).first().end_point,
+                            "Owner":User.query.filter_by(id=bus.owner_id).first().username,
+                            "no_of_seats":bus.number_of_seats,
+                            "driver":bus.driver
+                        }
+                        for bus in query_user.buses
+                    ]  
+                }
+            ]
+            return user_details,200
+        else:
+            
+            user_details=[
+                {
+                    
+                    "id":query_user.id,
+                    "username":query_user.username,
+                    "email":query_user.email,
+                    "user_type":query_user.user_type,
+                    "Bookings":[
+                        {
+                            
+                            "id":booking.id,
+                            "By":User.query.filter_by(id=booking.user_id).first().username,
+                            "bus_id":booking.bus_id,
+                            "departure_time":booking.departure_time.strftime('%Y:%M:%d %H:%M:%S '),
+                            "return_time":booking.return_time.strftime('%Y:%M:%d %H:%M:%S ') if booking.return_time else None,
+                            "is_confirmed":booking.is_confirmed
+                        }
+                        for booking in query_user.bookings
+                    ]  
+                }
+            ]
+            return user_details,200
+    @jwt_required()
+    def put(self,id):
+        user_id=get_jwt_identity()
+        ad_user=User.query.filter_by(id=user_id).first()
+        if not(ad_user.user_type == "Admin"):
+            return {"error":"Unauthorized"},400
+        query_user=User.query.filter_by(id=id).first()
+        if not query_user:
+            return {"Error":"User does not exist!!"},401
+        
+        try:
+            data=request.get_json()
+            user_type=data["user_type"]
+            query_user.user_type=user_type
+            db.session.commit()
+            return{
+                "username":query_user.username,
+                "email":query_user.email,
+                "user_type":query_user.user_type
+            },200
+        except Exception as e:
+            return {"Error":str(e)},400
+    
+    @jwt_required()
+    def delete(self,id):
+        user_id=get_jwt_identity()
+        ad_user=User.query.filter_by(id=user_id).first()
+        if not(ad_user.user_type == "Admin"):
+            return {"error":"Unauthorized"},400
+        query_user=User.query.filter_by(id=id).first()
+        if not query_user:
+            return {"Error":"User does not exist!!"},401  
+        db.session.delete(query_user)
+        db.session.commit()
+        return {
+            "Message":"User Deleted Successfully"
+        },200
+    
+class Buses(Resource):
+    @jwt_required()
+    def get(self):
+        user_id=get_jwt_identity()
+        user=User.query.filter_by(id=user_id).first()
+        if not(user.user_type == "BusOwner"):
+            return {"Error":"Unauthorization error!!"},401
+        buses=[
+            {
+                "id":bus.id,
+                "Name":bus.name,
+                "Number Plate":bus.number_plate,
+                "From":Route.query.filter_by(id=bus.route_id).first().start_point,
+                "To":Route.query.filter_by(id=bus.route_id).first().end_point,
+                "Owner":User.query.filter_by(id=bus.owner_id).first().username,
+                "no_of_seats":bus.number_of_seats,
+                "driver":bus.driver
+            }
+            for bus in user.buses
+        ]
+        return buses,200
+    @jwt_required()
+    def post(self):
+        user_id=get_jwt_identity()
+        user=User.query.filter_by(id=user_id).first()
+        if not(user.user_type == "BusOwner"):
+            return {"Error":"Unauthorization error!!"},401
+        data=request.get_json()
+        name=data['name']
+        number_plate=data['number_plate']
+        route_id=data['route_id']
+        seats_num=data['no_of_seats']
+        driver=data['driver']
+        route=Route.query.filter_by(id=route_id).first()
+        existing_bus=Bus.query.filter_by(number_plate=number_plate).first()
+        if not route:
+            return{"Error":"Route does not exist!!"}
+        elif existing_bus:
+            return{"Error":f"Bus With Plate_No {number_plate} already exists!!"},401
+        try:
+            new_bus=Bus(name=name,number_plate=number_plate,owner_id=user_id,route_id=route_id,number_of_seats=seats_num,driver=driver)
+            db.session.add(new_bus)
+            db.session.commit()
+            return{
+                
+                "id":new_bus.id,
+                "Name":new_bus.name,
+                "Number_plate":new_bus.number_plate,
+                "From":Route.query.filter_by(id=new_bus.route_id).first().start_point,
+                "To":Route.query.filter_by(id=new_bus.route_id).first().end_point,
+                "Owner":User.query.filter_by(id=new_bus.owner_id).first().username,
+                "no_of_seats":new_bus.number_of_seats,
+                "driver":new_bus.driver
+                
+            },201
+        except Exception as e:
+            return{"Error":str(e)},400
+        
+class BusesById(Resource):
+    @jwt_required()
+    def patch(self,id):
+        user_id=get_jwt_identity()
+        user=User.query.filter_by(id=user_id).first()
+        bus=Bus.query.filter_by(id=id).first()
+        if not(user.user_type == "BusOwner"):
+            return {"Error":"Unauthorization error!!"},401
+        elif not bus:
+            return {"Error":"Bus does not exist!!"},401
+        elif bus not in user.buses:
+            return {"Error":"Unauthorization error!!"},401
+        for attr in request.get_json():
+            setattr(bus,attr,request.json[attr])
+        db.session.add(bus)
+        db.session.commit()
+        return { 
+            "id":bus.id,
+            "Name":bus.name,
+            "Number Plate":bus.number_plate,
+            "From":Route.query.filter_by(id=bus.route_id).first().start_point,
+            "To":Route.query.filter_by(id=bus.route_id).first().end_point,
+            "Owner":User.query.filter_by(id=bus.owner_id).first().username,
+            "no_of_seats":bus.number_of_seats,
+            "driver":bus.driver
+        },200
+    
+    @jwt_required()
+    def delete(self,id):
+        user_id=get_jwt_identity()
+        user=User.query.filter_by(id=user_id).first()
+        bus=Bus.query.filter_by(id=id).first()
+        if not(user.user_type == "BusOwner"):
+            return {"Error":"Unauthorization error!!"},401
+        elif not bus:
+            return {"Error":"Bus does not exist!!"},401
+        elif bus not in user.buses:
+            return {"Error":"Unauthorization error!!"},401  
+        db.session.delete(bus)
+        db.session.commit()
+        return {
+            "message":"Bus deleted successfully!!"
+        },200
 class Routes(Resource):
     def get(self):
         routes=[
             {
-                "bus_id":route.bus_id,
+                "id":route.id,
                 "start_point":route.start_point,
                 "end_point":route.end_point,
                 "price":route.price,
@@ -65,12 +278,247 @@ class Routes(Resource):
             for route in Route.query.all()
         ]
         return routes,200
+    @jwt_required()
+    def post(self):
+        user_id=get_jwt_identity()
+        user=User.query.filter_by(id=user_id).first()
+        if not(user.user_type == "Admin"):
+            return {"error":"Unauthorized"},400
+        data=request.get_json()
+        start_point=data['start_point']
+        end_point=data['end_point']
+        price=data['price']
+        existing_route=Route.query.filter_by(start_point=start_point,end_point=end_point).first()
+        
+        if existing_route:
+            return {"Error":"Route exists!"},401
+        
+        try:
+            new_route=Route(start_point=start_point,end_point=end_point,price=price)
+            db.session.add(new_route)
+            db.session.commit()
+            return {
+                
+                "id":new_route.id,
+                "start_point":new_route.start_point,
+                "end_point":new_route.end_point,
+                "price":new_route.price,
+                "departure_time":new_route.departure_time.strftime('%Y-%m-%d %H:%M:%S'),
+                "return_time":new_route.return_time.strftime('%Y-%m-%d %H:%M:%S') if new_route.return_time else None,
+            },201
+        except Exception as e:
+            return {
+                "Error":str(e)
+            },401
+        
+class RoutesById(Resource):
+    def get(self,id):
+        route=Route.query.filter_by(id=id).first()
+        if not route:
+            return {"Message":"Route Not Found"}
+        
+        route_details=[
+            {
+                "route_id":route.id,
+                "start_point":route.start_point,
+                "end_point":route.end_point,
+                "price":route.price,
+                "departure_time":route.departure_time.strftime('%Y-%m-%d %H:%M:%S'),
+                "return_time":route.return_time.strftime('%Y-%m-%d %H:%M:%S') if route.return_time else None,
+                "buses":[
+                    {
+                    "id":bus.id,
+                    "name":bus.name,
+                    "number_plate":bus.number_plate,
+                    "owner_id":bus.owner_id,
+                    "owner":User.query.filter_by(id=bus.owner_id).first().username,
+                    "number_of_seats":bus.number_of_seats,
+                    "driver":bus.driver
+                    }
+                    for bus in route.buses
+                ]
+            }
+        
+        ]
+        return route_details,200
+      
+    @jwt_required()    
+    def patch(self,id):
+        user_id=get_jwt_identity()
+        user=User.query.filter_by(id=user_id).first()
+        if not(user.user_type == "Admin"):
+            return {"error":"Unauthorized"},400
+        route=Route.query.filter_by(id=id).first()
+        if not route:
+            return {"Error":"Route Not found!!!"}
+        try:
+            for attr in request.get_json():
+                setattr(route,attr,request.json[attr])
+            db.session.add(route)
+            db.session.commit()
+            return {
+                "id":route.id,
+                "start_point":route.start_point,
+                "end_point":route.end_point,
+                "price":route.price,
+                "departure_time":route.departure_time.strftime('%Y-%m-%d %H:%M:%S'),
+                "return_time":route.return_time.strftime('%Y-%m-%d %H:%M:%S') if route.return_time else None,
+            },200
+        except Exception as e:
+            return {"Error":str(e)},400
+    @jwt_required()
+    def delete(self,id):
+        user_id=get_jwt_identity()
+        user=User.query.filter_by(id=user_id).first()
+        if not(user.user_type == "Admin"):
+            return {"Error":"Unauthorized"},400
+        route=Route.query.filter_by(id=id).first()
+        if not route:
+            return {"Error":"Route Not Found!!!"}
+        db.session.delete(route)
+        db.session.commit()
+        return{
+            "Message":"Route Successfully Deleted!!"
+        },200
+        
+            
+class BookingList(Resource):
+    @jwt_required()
+    def get(self):
+        user_id=get_jwt_identity()
+        current_user=User.query.filter_by(id=user_id).first()
+        if not current_user.bookings:
+            return {"Message":"No Bookings Available.."}
+        else:
+            bookings=[
+                {
+                    "booking_id":booking.id,
+                    "bus_id":booking.bus_id,
+                    "user_id":booking.user_id,
+                    "seat_number":booking.seat_number,
+                    "departure_time":booking.departure_time.strftime('%Y-%M-%d %H:%M:%S'),
+                    "return_time":booking.return_time.strftime('%Y-%M-%d %H:%M:%S') if booking.return_time else None,
+                    "is_confirmed":booking.is_confirmed
+                }
+                
+                for booking in current_user.bookings
+            ]
+        return bookings,200
+    @jwt_required()
+    def post(self):
+        user_id=get_jwt_identity()
+        data=request.get_json()
+        bus_id=data['bus_id']
+        seat_number=data['seat_number']
+        is_confirmed=data['is_confirmed']
+        
+        bus=Bus.query.filter_by(id=bus_id).first()
+        existing_booking = Booking.query.filter_by(user_id=user_id,bus_id=bus_id).first()
+        existing_seat=Booking.query.filter_by(bus_id=bus_id).first()
+        if not bus:
+            return {"Error":"Bus Does not exist"}
+        elif existing_booking:
+            return {"Error":"Booking Already Exists.."}
+        elif seat_number == existing_seat.seat_number:
+            return {"Error":"Seat Has Already Been Booked."}
+        else:
+            try:
+                new_booking=Booking(user_id=user_id,bus_id=bus_id,seat_number=seat_number,is_confirmed=is_confirmed)
+                db.session.add(new_booking)
+                db.session.commit()
+                return {
+                    "booking_id":new_booking.id,
+                    "user_id":new_booking.user_id,
+                    "bus_id":new_booking.bus_id,
+                    "seat_number":new_booking.seat_number,
+                    "departure_time":new_booking.departure_time.strftime('%Y-%M-%d %H:%M:%S'),
+                    "return_time":new_booking.return_time.strftime('%Y-%M-%d %H:%M:%S') if new_booking.return_time else None,
+                    "is_confirmed":new_booking.is_confirmed
+                },201
+            except Exception as e:
+                return {"error":str(e)},401
+      
+class BookingById(Resource):
+    @jwt_required()
+    def get(self,id):
+        user_id=get_jwt_identity()
+        user=User.query.filter_by(id=user_id).first()
+        booking=Booking.query.filter_by(id=id).first()
+        if not booking:
+            return {"error":"Booking does not exist"},401
+        elif booking not in user.bookings:
+            return {"error":"Unauthorized to perform this action."},401
+        return {  
+                "booking_id":booking.id,
+                "user_id":booking.user_id,
+                "bus_id":booking.bus_id,
+                "seat_number":booking.seat_number,
+                "departure_time":booking.departure_time.strftime('%Y-%M-%d %H:%M:%S'),
+                "return_time":booking.return_time.strftime('%Y-%M-%d %H:%M:%S') if booking.return_time else None,
+                "is_confirmed":booking.is_confirmed
+        },200
+    
+    @jwt_required()
+    def put(self,id):
+        user_id=get_jwt_identity()
+        user=User.query.filter_by(id=user_id).first()
+        booking=Booking.query.filter_by(id=id).first()
+        if not booking:
+            return {"error":"Booking does not exist"},401
+        elif booking not in user.bookings:
+            return {"error":"Unauthorized to perform this action."},401
+        else:
+            data=request.get_json()
+            seat_number=data["seat_number"]
+            is_confirmed=data["is_confirmed"]
+            existing_seat=Booking.query.filter_by(bus_id=booking.bus_id,seat_number=seat_number).first()
+            if existing_seat:
+                return {"Error":"Seat Has already been booked.."},400
+            # # for attr in data:
+            # #     setattr(booking,attr,data[attr])
+            # for attr in request.get_json():
+            #     setattr(booking,attr,request.json[attr])
+            booking.seat_number=seat_number
+            booking.is_confirmed=is_confirmed
+            # db.session.add(booking)
+            db.session.commit()
+            return {  
+                "booking_id":booking.id,
+                "user_id":booking.user_id,
+                "bus_id":booking.bus_id,
+                "seat_number":booking.seat_number,
+                "departure_time":booking.departure_time.strftime('%Y-%M-%d %H:%M:%S'),
+                "return_time":booking.return_time.strftime('%Y-%M-%d %H:%M:%S') if booking.return_time else None,
+                "is_confirmed":booking.is_confirmed
+        },200
+    @jwt_required()
+    def delete(self,id):
+        user_id=get_jwt_identity()
+        user=User.query.filter_by(id=user_id).first()
+        booking=Booking.query.filter_by(id=id).first()
+        if not booking:
+            return {"error":"Booking does not exist"},401
+        elif booking not in user.bookings:
+            return {"error":"Unauthorized to perform this action."},401
+        
+        db.session.delete(booking)
+        db.session.commit()
+        return {"message":"Booking deleted Successfully!!"},200
+        
+        
 api.add_resource(Home,'/',endpoint='/')
 api.add_resource(SignUp,'/sign_up',endpoint='/sign_up')
 api.add_resource(Login,'/login',endpoint='/login')
 api.add_resource(Logout,'/logout',endpoint='/logout')
 api.add_resource(Routes,'/routes',endpoint='/routes')
-    
+api.add_resource(Users,'/users',endpoint='/users')
+api.add_resource(UsersById,'/users/<int:id>',endpoint='/users/<int:id>')
+api.add_resource(Buses,'/buses',endpoint='/buses')
+api.add_resource(BusesById,'/buses/<int:id>',endpoint='/buses/<int:id>')
+api.add_resource(RoutesById,'/routes/<int:id>',endpoint='/routes/<int:id>')
+api.add_resource(BookingList,'/bookings',endpoint='/bookings')
+api.add_resource(BookingById,'/bookings/<int:id>',endpoint='/bookings/<int:id>')
+
     
 
 if __name__ == "__main__":
