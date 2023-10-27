@@ -7,6 +7,7 @@ from flask_restful import Resource
 from flask_jwt_extended import create_access_token,jwt_required,get_jwt_identity
 from flask import jsonify,request
 from werkzeug.security import generate_password_hash,check_password_hash
+from datetime import datetime
 class Home(Resource):
     def get(self):
         return {"message":"Hello World"}
@@ -14,7 +15,7 @@ class Home(Resource):
 class SignUp(Resource):
     
     def post(self):
-        
+
         try:
             data=request.get_json()
             username=data['username']
@@ -343,7 +344,7 @@ class RoutesById(Resource):
         return route_details,200
       
     @jwt_required()    
-    def patch(self,id):
+    def put(self,id):
         user_id=get_jwt_identity()
         user=User.query.filter_by(id=user_id).first()
         if not(user.user_type == "Admin"):
@@ -352,10 +353,22 @@ class RoutesById(Resource):
         if not route:
             return {"Error":"Route Not found!!!"}
         try:
-            for attr in request.get_json():
-                setattr(route,attr,request.json[attr])
-            db.session.add(route)
+            data=request.get_json()
+            departure_time=data["departure_time"]
+            start_point=data["start_point"]
+            end_point=data["end_point"]
+            price=data["price"]
+            new_departure_time = datetime.strptime(departure_time, '%Y-%m-%d %H:%M:%S')
+            # for attr in request.get_json():
+            #     setattr(route,attr,request.json[attr])
+            # db.session.add(route)
+            # db.session.commit()
+            route.departure_time=new_departure_time
+            route.start_point=start_point
+            route.end_point=end_point
+            route.price=price
             db.session.commit()
+            
             return {
                 "id":route.id,
                 "start_point":route.start_point,
