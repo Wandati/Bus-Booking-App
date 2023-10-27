@@ -2,7 +2,7 @@ from .dbconfig import db
 from sqlalchemy.orm import validates
 class Bus(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    # number_plate=db.Column(db.String(),unique=True,nullable=False)
+    number_plate=db.Column(db.String(),unique=True,nullable=False)
     name = db.Column(db.String(10),nullable=True)
     route_id=db.Column(db.Integer,db.ForeignKey('route.id'),nullable=False)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

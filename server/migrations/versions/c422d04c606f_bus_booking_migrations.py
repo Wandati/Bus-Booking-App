@@ -1,8 +1,8 @@
-"""migrations
+"""Bus Booking Migrations
 
-Revision ID: 12704e80127a
+Revision ID: c422d04c606f
 Revises: 
-Create Date: 2023-10-26 11:46:38.588248
+Create Date: 2023-10-27 08:54:50.906019
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '12704e80127a'
+revision = 'c422d04c606f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -39,14 +39,16 @@ def upgrade():
     )
     op.create_table('bus',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=10), nullable=False),
+    sa.Column('number_plate', sa.String(), nullable=False),
+    sa.Column('name', sa.String(length=10), nullable=True),
     sa.Column('route_id', sa.Integer(), nullable=False),
     sa.Column('owner_id', sa.Integer(), nullable=False),
     sa.Column('number_of_seats', sa.Integer(), nullable=False),
     sa.Column('driver', sa.String(length=20), nullable=False),
     sa.ForeignKeyConstraint(['owner_id'], ['user.id'], ),
     sa.ForeignKeyConstraint(['route_id'], ['route.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('number_plate')
     )
     op.create_table('booking',
     sa.Column('id', sa.Integer(), nullable=False),

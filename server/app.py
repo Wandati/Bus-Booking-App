@@ -174,6 +174,7 @@ class Buses(Resource):
             {
                 "id":bus.id,
                 "Name":bus.name,
+                "Number Plate":bus.number_plate,
                 "From":Route.query.filter_by(id=bus.route_id).first().start_point,
                 "To":Route.query.filter_by(id=bus.route_id).first().end_point,
                 "Owner":User.query.filter_by(id=bus.owner_id).first().username,
@@ -191,24 +192,25 @@ class Buses(Resource):
             return {"Error":"Unauthorization error!!"},401
         data=request.get_json()
         name=data['name']
-        # number_plate=data['number_plate']
+        number_plate=data['number_plate']
         route_id=data['route_id']
         seats_num=data['no_of_seats']
         driver=data['driver']
         route=Route.query.filter_by(id=route_id).first()
-        # existing_bus=Bus.query.filter_by(number_plate=number_plate).first()
+        existing_bus=Bus.query.filter_by(number_plate=number_plate).first()
         if not route:
             return{"Error":"Route does not exist!!"}
-        # elif existing_bus:
-        #     return{"Error":f"Bus With Plate_No {number_plate} already exists!!"},401
+        elif existing_bus:
+            return{"Error":f"Bus With Plate_No {number_plate} already exists!!"},401
         try:
-            new_bus=Bus(name=name,owner_id=user_id,route_id=route_id,number_of_seats=seats_num,driver=driver)
+            new_bus=Bus(name=name,number_plate=number_plate,owner_id=user_id,route_id=route_id,number_of_seats=seats_num,driver=driver)
             db.session.add(new_bus)
             db.session.commit()
             return{
                 
                 "id":new_bus.id,
                 "Name":new_bus.name,
+                "Number_plate":new_bus.number_plate,
                 "From":Route.query.filter_by(id=new_bus.route_id).first().start_point,
                 "To":Route.query.filter_by(id=new_bus.route_id).first().end_point,
                 "Owner":User.query.filter_by(id=new_bus.owner_id).first().username,
@@ -238,6 +240,7 @@ class BusesById(Resource):
         return { 
             "id":bus.id,
             "Name":bus.name,
+            "Number Plate":bus.number_plate,
             "From":Route.query.filter_by(id=bus.route_id).first().start_point,
             "To":Route.query.filter_by(id=bus.route_id).first().end_point,
             "Owner":User.query.filter_by(id=bus.owner_id).first().username,
@@ -326,6 +329,7 @@ class RoutesById(Resource):
                     {
                     "id":bus.id,
                     "name":bus.name,
+                    "number_plate":bus.number_plate,
                     "owner_id":bus.owner_id,
                     "owner":User.query.filter_by(id=bus.owner_id).first().username,
                     "number_of_seats":bus.number_of_seats,
@@ -455,7 +459,7 @@ class BookingById(Resource):
         },200
     
     @jwt_required()
-    def patch(self,id):
+    def put(self,id):
         user_id=get_jwt_identity()
         user=User.query.filter_by(id=user_id).first()
         booking=Booking.query.filter_by(id=id).first()
@@ -465,11 +469,18 @@ class BookingById(Resource):
             return {"error":"Unauthorized to perform this action."},401
         else:
             data=request.get_json()
-            # for attr in data:
-            #     setattr(booking,attr,data[attr])
-            for attr in request.get_json():
-                setattr(booking,attr,request.json[attr])
-            db.session.add(booking)
+            seat_number=data["seat_number"]
+            is_confirmed=data["is_confirmed"]
+            existing_seat=Booking.query.filter_by(bus_id=booking.bus_id,seat_number=seat_number).first()
+            if existing_seat:
+                return {"Error":"Seat Has already been booked.."},400
+            # # for attr in data:
+            # #     setattr(booking,attr,data[attr])
+            # for attr in request.get_json():
+            #     setattr(booking,attr,request.json[attr])
+            booking.seat_number=seat_number
+            booking.is_confirmed=is_confirmed
+            # db.session.add(booking)
             db.session.commit()
             return {  
                 "booking_id":booking.id,
@@ -503,6 +514,7 @@ api.add_resource(Routes,'/routes',endpoint='/routes')
 api.add_resource(Users,'/users',endpoint='/users')
 api.add_resource(UsersById,'/users/<int:id>',endpoint='/users/<int:id>')
 api.add_resource(Buses,'/buses',endpoint='/buses')
+api.add_resource(BusesById,'/buses/<int:id>',endpoint='/buses/<int:id>')
 api.add_resource(RoutesById,'/routes/<int:id>',endpoint='/routes/<int:id>')
 api.add_resource(BookingList,'/bookings',endpoint='/bookings')
 api.add_resource(BookingById,'/bookings/<int:id>',endpoint='/bookings/<int:id>')
