@@ -8,6 +8,7 @@ from flask_jwt_extended import create_access_token,jwt_required,get_jwt_identity
 from flask import jsonify,request
 from werkzeug.security import generate_password_hash,check_password_hash
 from datetime import datetime
+blacklisted_tokens = set()
 class Home(Resource):
     def get(self):
         return {"message":"Hello World"}
@@ -50,6 +51,8 @@ class Login(Resource):
 class Logout(Resource):
     @jwt_required()
     def delete(self):
+        current_user = get_jwt_identity()
+        blacklisted_tokens.add(current_user)
         return {"Message":"Logout Successful!"}
     
 class Users(Resource):
@@ -59,6 +62,8 @@ class Users(Resource):
         user=User.query.filter_by(id=user_id).first()
         if not(user.user_type == "Admin"):
             return {"error":"Unauthorized"},400
+        elif blacklisted_tokens:
+            return {"Error":"Unauthorized!!"},400
         users=[
             {
             "id":user.id,
@@ -76,6 +81,8 @@ class UsersById(Resource):
         ad_user=User.query.filter_by(id=user_id).first()
         if not(ad_user.user_type == "Admin"):
             return {"error":"Unauthorized"},400
+        elif blacklisted_tokens:
+            return {"Error":"Unauthorized!!"},400
         query_user=User.query.filter_by(id=id).first()
         if not query_user:
             return {"Error":"User does not exist!!"},401
@@ -132,6 +139,8 @@ class UsersById(Resource):
         ad_user=User.query.filter_by(id=user_id).first()
         if not(ad_user.user_type == "Admin"):
             return {"error":"Unauthorized"},400
+        elif blacklisted_tokens:
+            return {"Error":"Unauthorized!!"},400
         query_user=User.query.filter_by(id=id).first()
         if not query_user:
             return {"Error":"User does not exist!!"},401
@@ -155,6 +164,8 @@ class UsersById(Resource):
         ad_user=User.query.filter_by(id=user_id).first()
         if not(ad_user.user_type == "Admin"):
             return {"error":"Unauthorized"},400
+        elif blacklisted_tokens:
+            return {"Error":"Unauthorized!!"},400
         query_user=User.query.filter_by(id=id).first()
         if not query_user:
             return {"Error":"User does not exist!!"},401  
@@ -171,6 +182,8 @@ class Buses(Resource):
         user=User.query.filter_by(id=user_id).first()
         if not(user.user_type == "BusOwner"):
             return {"Error":"Unauthorization error!!"},401
+        elif blacklisted_tokens:
+            return {"Error":"Unauthorized!!"},400
         buses=[
             {
                 "id":bus.id,
@@ -191,6 +204,8 @@ class Buses(Resource):
         user=User.query.filter_by(id=user_id).first()
         if not(user.user_type == "BusOwner"):
             return {"Error":"Unauthorization error!!"},401
+        elif blacklisted_tokens:
+            return {"Error":"Unauthorized!!"},400
         data=request.get_json()
         name=data['name']
         number_plate=data['number_plate']
@@ -230,6 +245,8 @@ class BusesById(Resource):
         bus=Bus.query.filter_by(id=id).first()
         if not(user.user_type == "BusOwner"):
             return {"Error":"Unauthorization error!!"},401
+        elif blacklisted_tokens:
+            return {"Error":"Unauthorized!!"},400
         elif not bus:
             return {"Error":"Bus does not exist!!"},401
         elif bus not in user.buses:
@@ -256,6 +273,8 @@ class BusesById(Resource):
         bus=Bus.query.filter_by(id=id).first()
         if not(user.user_type == "BusOwner"):
             return {"Error":"Unauthorization error!!"},401
+        elif blacklisted_tokens:
+            return {"Error":"Unauthorized!!"},400
         elif not bus:
             return {"Error":"Bus does not exist!!"},401
         elif bus not in user.buses:
@@ -285,6 +304,8 @@ class Routes(Resource):
         user=User.query.filter_by(id=user_id).first()
         if not(user.user_type == "Admin"):
             return {"error":"Unauthorized"},400
+        elif blacklisted_tokens:
+            return {"Error":"Unauthorized!!"},400
         data=request.get_json()
         start_point=data['start_point']
         end_point=data['end_point']
@@ -349,6 +370,8 @@ class RoutesById(Resource):
         user=User.query.filter_by(id=user_id).first()
         if not(user.user_type == "Admin"):
             return {"error":"Unauthorized"},400
+        elif blacklisted_tokens:
+            return {"Error":"Unauthorized!!"},400
         route=Route.query.filter_by(id=id).first()
         if not route:
             return {"Error":"Route Not found!!!"}
@@ -385,6 +408,8 @@ class RoutesById(Resource):
         user=User.query.filter_by(id=user_id).first()
         if not(user.user_type == "Admin"):
             return {"Error":"Unauthorized"},400
+        elif blacklisted_tokens:
+            return {"Error":"Unauthorized!!"},400
         route=Route.query.filter_by(id=id).first()
         if not route:
             return {"Error":"Route Not Found!!!"}
@@ -402,6 +427,8 @@ class BookingList(Resource):
         current_user=User.query.filter_by(id=user_id).first()
         if not current_user.bookings:
             return {"Message":"No Bookings Available.."}
+        elif blacklisted_tokens:
+            return {"Error":"Unauthorized!!"},400
         else:
             bookings=[
                 {
@@ -432,6 +459,8 @@ class BookingList(Resource):
             return {"Error":"Bus Does not exist"}
         elif existing_booking:
             return {"Error":"Booking Already Exists.."}
+        elif blacklisted_tokens:
+            return {"Error":"Unauthorized!!"},400
         elif seat_number == existing_seat.seat_number:
             return {"Error":"Seat Has Already Been Booked."}
         else:
@@ -459,6 +488,8 @@ class BookingById(Resource):
         booking=Booking.query.filter_by(id=id).first()
         if not booking:
             return {"error":"Booking does not exist"},401
+        elif blacklisted_tokens:
+            return {"Error":"Unauthorized!!"},400
         elif booking not in user.bookings:
             return {"error":"Unauthorized to perform this action."},401
         return {  
@@ -478,6 +509,8 @@ class BookingById(Resource):
         booking=Booking.query.filter_by(id=id).first()
         if not booking:
             return {"error":"Booking does not exist"},401
+        elif blacklisted_tokens:
+            return {"Error":"Unauthorized!!"},400
         elif booking not in user.bookings:
             return {"error":"Unauthorized to perform this action."},401
         else:
@@ -511,6 +544,8 @@ class BookingById(Resource):
         booking=Booking.query.filter_by(id=id).first()
         if not booking:
             return {"error":"Booking does not exist"},401
+        elif blacklisted_tokens:
+            return {"Error":"Unauthorized!!"},400
         elif booking not in user.bookings:
             return {"error":"Unauthorized to perform this action."},401
         
