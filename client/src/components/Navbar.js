@@ -1,10 +1,13 @@
-export default function Navbar() {
+import React from 'react';
+import { Link } from 'react-router-dom'; 
+
+function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
-        <a className="navbar-brand" href="#">
+        <Link to="/" className="navbar-brand"> 
           Bus Booking App
-        </a>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -19,35 +22,35 @@ export default function Navbar() {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">
+              <Link to="/" className="nav-link active"> 
                 Home
-              </a>
+              </Link>
+              </li>
+              <li className="nav-item">
+              <Link to="/admin" className="nav-link active"> 
+                Admin dashboard
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">
+              <Link to="/about" className="nav-link active"> 
                 About Us
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">
+              <Link to="/contact" className="nav-link active">
                 Contact Us
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">
+              <Link to="/signup" className="nav-link active">
                 Sign-Up
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">
+              <Link to="/login" className="nav-link active"> 
                 Login
-              </a>
+              </Link>
             </li>
-            {/* <li className="nav-item">
-              <a className="nav-link" href="#">
-                Link
-              </a>
-            </li> */}
           </ul>
           <form className="d-flex" role="search">
             <input
@@ -65,3 +68,5 @@ export default function Navbar() {
     </nav>
   );
 }
+
+export default Navbar;
