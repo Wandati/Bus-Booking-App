@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './components/Home';
 import About from './components/About';
@@ -8,6 +8,7 @@ import Contact from './components/Contact';
 import Signup from './components/Signup';
 import LoginForm from './components/Login';
 import admin from './components/admin'; 
+import Footer from "./components/footer"
 function App() {
   return (
     <Router>
@@ -24,7 +25,8 @@ function App() {
             <Route path="/admin" element={<admin />} /> 
           </Routes>
         </div>
-        <Footer />
+        <Footer/>
+    
       </div>
     </Router>
   );
