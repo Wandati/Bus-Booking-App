@@ -98,12 +98,14 @@ class UsersById(Resource):
                     "Buses":[
                         {
                             "id":bus.id,
-                            "name":bus.name,
+                            "number_plate":bus.number_plate,
                             "From":Route.query.filter_by(id=bus.route_id).first().start_point,
                             "To":Route.query.filter_by(id=bus.route_id).first().end_point,
+                            "Departure_Time":bus.departure_time.strftime('%Y-%M-%d %H:%M:%S '),
                             "Owner":User.query.filter_by(id=bus.owner_id).first().username,
-                            "no_of_seats":bus.number_of_seats,
-                            "driver":bus.driver
+                            "no_of_seats":bus.capacity,
+                            "available_seats":bus.available_seats,
+                            "driver":bus.driver,
                         }
                         for bus in query_user.buses
                     ]  
@@ -123,10 +125,11 @@ class UsersById(Resource):
                         {
                             
                             "id":booking.id,
-                            "By":User.query.filter_by(id=booking.user_id).first().username,
+                            # "By":User.query.filter_by(id=booking.user_id).first().username,
                             "bus_id":booking.bus_id,
-                            "departure_time":booking.departure_time.strftime('%Y:%M:%d %H:%M:%S '),
-                            "return_time":booking.return_time.strftime('%Y:%M:%d %H:%M:%S ') if booking.return_time else None,
+                            # "departure_time":booking.departure_time.strftime('%Y:%M:%d %H:%M:%S '),
+                            "departure_time":Bus.query.filter_by(id=booking.bus_id).first().departure_time.strftime('%Y-%m-%d %H:%M:%S '),
+                            # "return_time":booking.return_time.strftime('%Y:%M:%d %H:%M:%S ') if booking.return_time else None,
                             "is_confirmed":booking.is_confirmed
                         }
                         for booking in query_user.bookings
@@ -188,12 +191,14 @@ class Buses(Resource):
         buses=[
             {
                 "id":bus.id,
-                "Name":bus.name,
+                # "Name":bus.name,
                 "Number Plate":bus.number_plate,
                 "From":Route.query.filter_by(id=bus.route_id).first().start_point,
                 "To":Route.query.filter_by(id=bus.route_id).first().end_point,
-                "Owner":User.query.filter_by(id=bus.owner_id).first().username,
-                "no_of_seats":bus.number_of_seats,
+                "Departure_Time":bus.departure_time.strftime('%Y-%m-%d %H:%M:%S '),
+                # "Owner":User.query.filter_by(id=bus.owner_id).first().username,
+                "no_of_seats":bus.capacity,
+                "available_seats":bus.available_seats,
                 "driver":bus.driver
             }
             for bus in user.buses
@@ -208,11 +213,12 @@ class Buses(Resource):
         elif user_id in blacklisted_tokens:
             return {"Error":"Unauthorized!!"},400
         data=request.get_json()
-        name=data['name']
+        # name=data['name']
         number_plate=data['number_plate']
         route_id=data['route_id']
         seats_num=data['no_of_seats']
         driver=data['driver']
+        departure_time=data['departure_time']
         route=Route.query.filter_by(id=route_id).first()
         existing_bus=Bus.query.filter_by(number_plate=number_plate).first()
         if not route:
@@ -220,18 +226,22 @@ class Buses(Resource):
         elif existing_bus:
             return{"Error":f"Bus With Plate_No {number_plate} already exists!!"},401
         try:
-            new_bus=Bus(name=name,number_plate=number_plate,owner_id=user_id,route_id=route_id,number_of_seats=seats_num,driver=driver)
+            new_departure_time=datetime.strptime(departure_time,'%Y-%m-%d %H:%M:%S')
+            new_bus=Bus(number_plate=number_plate,owner_id=user_id,departure_time=new_departure_time,route_id=route_id,number_of_seats=seats_num,driver=driver)
             db.session.add(new_bus)
             db.session.commit()
             return{
                 
                 "id":new_bus.id,
-                "Name":new_bus.name,
+                # "Name":new_bus.name,
                 "Number_plate":new_bus.number_plate,
                 "From":Route.query.filter_by(id=new_bus.route_id).first().start_point,
                 "To":Route.query.filter_by(id=new_bus.route_id).first().end_point,
-                "Owner":User.query.filter_by(id=new_bus.owner_id).first().username,
-                "no_of_seats":new_bus.number_of_seats,
+                "Departure_Time":new_bus.departure_time.strftime('%Y-%m-%d %H:%M:%S '),
+                "no_of_seats":bus.capacity,
+                "available_seats":bus.available_seats,
+                # "Owner":User.query.filter_by(id=new_bus.owner_id).first().username,
+                # "no_of_seats":new_bus.number_of_seats,
                 "driver":new_bus.driver
                 
             },201
@@ -258,12 +268,15 @@ class BusesById(Resource):
         db.session.commit()
         return { 
             "id":bus.id,
-            "Name":bus.name,
+            # "Name":bus.name,
             "Number Plate":bus.number_plate,
             "From":Route.query.filter_by(id=bus.route_id).first().start_point,
             "To":Route.query.filter_by(id=bus.route_id).first().end_point,
-            "Owner":User.query.filter_by(id=bus.owner_id).first().username,
-            "no_of_seats":bus.number_of_seats,
+            "Departure_Time":bus.departure_time.strftime('%Y-%m-%d %H:%M:%S '),
+            "no_of_seats":bus.capacity,
+            "available_seats":bus.available_seats,
+            # "Owner":User.query.filter_by(id=bus.owner_id).first().username,
+            # "no_of_seats":bus.number_of_seats,
             "driver":bus.driver
         },200
     
@@ -293,8 +306,8 @@ class Routes(Resource):
                 "start_point":route.start_point,
                 "end_point":route.end_point,
                 "price":route.price,
-                "departure_time":route.departure_time.strftime('%Y-%m-%d %H:%M:%S'),
-                "return_time":route.return_time.strftime('%Y-%m-%d %H:%M:%S') if route.return_time else None
+                # "departure_time":route.departure_time.strftime('%Y-%m-%d %H:%M:%S'),
+                # "return_time":route.return_time.strftime('%Y-%m-%d %H:%M:%S') if route.return_time else None
             }
             for route in Route.query.all()
         ]
@@ -326,8 +339,8 @@ class Routes(Resource):
                 "start_point":new_route.start_point,
                 "end_point":new_route.end_point,
                 "price":new_route.price,
-                "departure_time":new_route.departure_time.strftime('%Y-%m-%d %H:%M:%S'),
-                "return_time":new_route.return_time.strftime('%Y-%m-%d %H:%M:%S') if new_route.return_time else None,
+                # "departure_time":new_route.departure_time.strftime('%Y-%m-%d %H:%M:%S'),
+                # "return_time":new_route.return_time.strftime('%Y-%m-%d %H:%M:%S') if new_route.return_time else None,
             },201
         except Exception as e:
             return {
@@ -346,16 +359,19 @@ class RoutesById(Resource):
                 "start_point":route.start_point,
                 "end_point":route.end_point,
                 "price":route.price,
-                "departure_time":route.departure_time.strftime('%Y-%m-%d %H:%M:%S'),
-                "return_time":route.return_time.strftime('%Y-%m-%d %H:%M:%S') if route.return_time else None,
+                # "departure_time":route.departure_time.strftime('%Y-%m-%d %H:%M:%S'),
+                # "return_time":route.return_time.strftime('%Y-%m-%d %H:%M:%S') if route.return_time else None,
                 "buses":[
                     {
                     "id":bus.id,
-                    "name":bus.name,
+                    # "name":bus.name,
                     "number_plate":bus.number_plate,
+                    "Departure_Time":bus.departure_time.strftime('%Y-%m-%d %H:%M:%S '),
                     "owner_id":bus.owner_id,
                     "owner":User.query.filter_by(id=bus.owner_id).first().username,
-                    "number_of_seats":bus.number_of_seats,
+                    "no_of_seats":bus.capacity,
+                    "available_seats":bus.available_seats, 
+                    # "number_of_seats":bus.number_of_seats,
                     "driver":bus.driver
                     }
                     for bus in route.buses
@@ -378,16 +394,16 @@ class RoutesById(Resource):
             return {"Error":"Route Not found!!!"}
         try:
             data=request.get_json()
-            departure_time=data["departure_time"]
+            # departure_time=data["departure_time"]
             start_point=data["start_point"]
             end_point=data["end_point"]
             price=data["price"]
-            new_departure_time = datetime.strptime(departure_time, '%Y-%m-%d %H:%M:%S')
+            # new_departure_time = datetime.strptime(departure_time, '%Y-%m-%d %H:%M:%S')
             # for attr in request.get_json():
             #     setattr(route,attr,request.json[attr])
             # db.session.add(route)
             # db.session.commit()
-            route.departure_time=new_departure_time
+            # route.departure_time=new_departure_time
             route.start_point=start_point
             route.end_point=end_point
             route.price=price
@@ -398,8 +414,8 @@ class RoutesById(Resource):
                 "start_point":route.start_point,
                 "end_point":route.end_point,
                 "price":route.price,
-                "departure_time":route.departure_time.strftime('%Y-%m-%d %H:%M:%S'),
-                "return_time":route.return_time.strftime('%Y-%m-%d %H:%M:%S') if route.return_time else None,
+                # "departure_time":route.departure_time.strftime('%Y-%m-%d %H:%M:%S'),
+                # "return_time":route.return_time.strftime('%Y-%m-%d %H:%M:%S') if route.return_time else None,
             },200
         except Exception as e:
             return {"Error":str(e)},400
@@ -437,8 +453,9 @@ class BookingList(Resource):
                     "bus_id":booking.bus_id,
                     "user_id":booking.user_id,
                     "seat_number":booking.seat_number,
-                    "departure_time":booking.departure_time.strftime('%Y-%M-%d %H:%M:%S'),
-                    "return_time":booking.return_time.strftime('%Y-%M-%d %H:%M:%S') if booking.return_time else None,
+                    "departure_time":Bus.query.filter_by(id=booking.bus_id).first().departure_time.strftime('%Y-%m-%d %H:%M:%S '),
+                    # "departure_time":booking.departure_time.strftime('%Y-%M-%d %H:%M:%S'),
+                    # "return_time":booking.return_time.strftime('%Y-%M-%d %H:%M:%S') if booking.return_time else None,
                     "is_confirmed":booking.is_confirmed
                 }
                 
@@ -468,14 +485,17 @@ class BookingList(Resource):
             try:
                 new_booking=Booking(user_id=user_id,bus_id=bus_id,seat_number=seat_number,is_confirmed=is_confirmed)
                 db.session.add(new_booking)
+                bus.available_seats-=1
                 db.session.commit()
+                
                 return {
                     "booking_id":new_booking.id,
                     "user_id":new_booking.user_id,
                     "bus_id":new_booking.bus_id,
                     "seat_number":new_booking.seat_number,
-                    "departure_time":new_booking.departure_time.strftime('%Y-%M-%d %H:%M:%S'),
-                    "return_time":new_booking.return_time.strftime('%Y-%M-%d %H:%M:%S') if new_booking.return_time else None,
+                    "departure_time":Bus.query.filter_by(id=new_booking.bus_id).first().departure_time.strftime('%Y-%m-%d %H:%M:%S '),
+                    # "departure_time":new_booking.departure_time.strftime('%Y-%M-%d %H:%M:%S'),
+                    # "return_time":new_booking.return_time.strftime('%Y-%M-%d %H:%M:%S') if new_booking.return_time else None,
                     "is_confirmed":new_booking.is_confirmed
                 },201
             except Exception as e:
@@ -498,8 +518,9 @@ class BookingById(Resource):
                 "user_id":booking.user_id,
                 "bus_id":booking.bus_id,
                 "seat_number":booking.seat_number,
-                "departure_time":booking.departure_time.strftime('%Y-%M-%d %H:%M:%S'),
-                "return_time":booking.return_time.strftime('%Y-%M-%d %H:%M:%S') if booking.return_time else None,
+                "departure_time":Bus.query.filter_by(id=booking.bus_id).first().departure_time.strftime('%Y-%m-%d %H:%M:%S '),
+                # "departure_time":booking.departure_time.strftime('%Y-%M-%d %H:%M:%S'),
+                # "return_time":booking.return_time.strftime('%Y-%M-%d %H:%M:%S') if booking.return_time else None,
                 "is_confirmed":booking.is_confirmed
         },200
     
@@ -534,8 +555,9 @@ class BookingById(Resource):
                 "user_id":booking.user_id,
                 "bus_id":booking.bus_id,
                 "seat_number":booking.seat_number,
-                "departure_time":booking.departure_time.strftime('%Y-%M-%d %H:%M:%S'),
-                "return_time":booking.return_time.strftime('%Y-%M-%d %H:%M:%S') if booking.return_time else None,
+                "departure_time":Bus.query.filter_by(id=booking.bus_id).first().departure_time.strftime('%Y-%m-%d %H:%M:%S '),
+                # "departure_time":booking.departure_time.strftime('%Y-%M-%d %H:%M:%S'),
+                # "return_time":booking.return_time.strftime('%Y-%M-%d %H:%M:%S') if booking.return_time else None,
                 "is_confirmed":booking.is_confirmed
         },200
     @jwt_required()
@@ -549,8 +571,10 @@ class BookingById(Resource):
             return {"Error":"Unauthorized!!"},400
         elif booking not in user.bookings:
             return {"error":"Unauthorized to perform this action."},401
-        
         db.session.delete(booking)
+        db.session.commit()
+        bus=Bus.query.filter_by(id=booking.bus_id).first()
+        bus.available_seats+=1
         db.session.commit()
         return {"message":"Booking deleted Successfully!!"},200
         

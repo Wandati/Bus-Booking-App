@@ -1,7 +1,7 @@
 from .dbconfig import db
 from sqlalchemy.orm import validates
 
-DEFAULT_USERS=["Customer","BusOwner"]
+DEFAULT_USERS=["Customer","BusOwner","Admin"]
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
