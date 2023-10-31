@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './components/Home';
 import Admin from './components/Admin';
 import About from './components/About';
+import Route from './components/Route';
 import Contact from './components/Contact';
 import Signup from './components/Signup';
 import LoginForm from './components/Login';
@@ -20,6 +21,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/" element={<Admin />} />
             <Route path="/about" element={<About />} />
+            <Route path="/route" element={<Route />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<LoginForm />} />
