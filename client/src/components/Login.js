@@ -4,17 +4,42 @@ function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Remember Me:", rememberMe);
+
+    const user = {
+      email,
+      password,
+    };
+
+    // Send a POST request to the login endpoint
+    fetch('http://127.0.0.1:5500/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          // Login successful, perform further actions (e.g., redirect)
+          // You may want to store a token in localStorage or a state management system
+        } else {
+          // Login failed, handle the error
+          setError('Invalid email or password');
+        }
+      })
+      .catch((error) => {
+        // Handle any network errors
+        setError('An error occurred while logging in');
+      });
   };
 
   return (
-    <>
-      <h1 className="text-center">Login</h1>
+    <div>
+      <h1>Login</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="exampleInputEmail1">Email address</label>
@@ -54,11 +79,12 @@ function LoginForm() {
             Check me out
           </label>
         </div>
-        <button type="submit" className="btn btn-secondary">
+        {error && <div className="alert alert-danger">{error}</div>}
+        <button type="submit" className="btn btn-primary">
           Login
         </button>
       </form>
-    </>
+    </div>
   );
 }
 

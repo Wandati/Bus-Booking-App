@@ -1,13 +1,17 @@
-from config import jwt,app,db,api
+from config import jwt, app, db, api
+
 from models.booking import Booking
 from models.bus import Bus
 from models.user import User
 from models.routes import Route
 from flask_restful import Resource
-from flask_jwt_extended import create_access_token,jwt_required,get_jwt_identity
-from flask import jsonify,request
-from werkzeug.security import generate_password_hash,check_password_hash
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask import jsonify, request
+from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+blacklisted_tokens = set()
+
+
 blacklisted_tokens = set()
 class Home(Resource):
     def get(self):

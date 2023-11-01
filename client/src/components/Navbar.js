@@ -46,16 +46,6 @@ function Navbar() {
                 Sign-Up
               </Link>
             </li>
-            <li className="nav-item">
-              <Link to="/login" className="nav-link active">
-                Login
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/routes" className="nav-link active">
-                Routes
-              </Link>
-            </li>
           </ul>
           <form className="d-flex" role="search">
             <input
