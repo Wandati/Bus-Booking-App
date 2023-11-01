@@ -11,7 +11,7 @@ function Footer() {
   return (
     <footer className="footer-clean">
       <div className="social-container">
-        <h3>Social Follow</h3>
+        <h3>Follow Us</h3>
         <a href="https://www.youtube.com/c/jamesqquick" className="youtube social">
           <FontAwesomeIcon icon={faYoutube} size="2x" />
         </a>
@@ -29,6 +29,7 @@ function Footer() {
         <p>About: Our company is dedicated to providing high-quality services.</p>
         <p>Location: 123 Main Street, City, Country</p>
         <p>Telephone: +1 (123) 456-7890</p>
+        <p>Email: info@bustrack.com</p>
       </div>
     </footer>
   );
