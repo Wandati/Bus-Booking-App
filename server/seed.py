@@ -47,7 +47,7 @@ with app.app_context():
         {"username": "busowner3", "email": "BusOwner3@example.com", "password": "password4", "user_type": "BusOwner"},
         {"username": "busowner4", "email": "BusOwner4@example.com", "password": "password9", "user_type": "BusOwner"},
         {"username": "customer1", "email": "customer1@example.com", "password": "password5", "user_type": "Customer"},
-        {"username": "custome2", "email": "customer2@example.com", "password": "password6", "user_type": "Customer"},
+        {"username": "customer2", "email": "customer2@example.com", "password": "password6", "user_type": "Customer"},
         {"username": "customer3", "email": "customer3@example.com", "password": "password7", "user_type": "Customer"},
         {"username": "customer4", "email": "customer4@example.com", "password": "password8", "user_type": "Customer"},
         {"username": "customer5", "email": "customer5@example.com", "password": "password10", "user_type": "Customer"}
