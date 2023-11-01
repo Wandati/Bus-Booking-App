@@ -3,14 +3,14 @@ import Navbar from './components/Navbar';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './components/Home';
-import Admin from './components/Admin';
+import Admin from './components/admin';
 import About from './components/About';
 import BusRoute from './components/BusRoute';
 import Contact from './components/Contact';
 import Signup from './components/Signup';
 import LoginForm from './components/Login';
-import admin from './components/admin'; 
 import Footer from "./components/footer"
+
 function App() {
   return (
     <Router>
