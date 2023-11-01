@@ -1,5 +1,5 @@
 from config import jwt, app, db, api
-from flask_cors import CORS  # Import Flask-CORS
+
 from models.booking import Booking
 from models.bus import Bus
 from models.user import User
@@ -11,8 +11,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 blacklisted_tokens = set()
 
-# Initialize CORS with your Flask app
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+
 blacklisted_tokens = set()
 class Home(Resource):
     def get(self):
