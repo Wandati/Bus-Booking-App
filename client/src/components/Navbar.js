@@ -25,6 +25,11 @@ function Navbar() {
               <Link to="/" className="nav-link active"> 
                 Home
               </Link>
+              </li>
+              <li className="nav-item">
+              <Link to="/admin" className="nav-link active"> 
+                Admin dashboard
+              </Link>
             </li>
             <li className="nav-item">
               <Link to="/about" className="nav-link active"> 
