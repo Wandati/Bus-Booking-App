@@ -1,8 +1,8 @@
-"""Bus Booking Migrations
+"""Update
 
-Revision ID: c422d04c606f
+Revision ID: 74e2e6162e96
 Revises: 
-Create Date: 2023-10-27 08:54:50.906019
+Create Date: 2023-10-31 21:21:53.712613
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c422d04c606f'
+revision = '74e2e6162e96'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,8 +23,6 @@ def upgrade():
     sa.Column('start_point', sa.String(length=50), nullable=False),
     sa.Column('end_point', sa.String(length=50), nullable=False),
     sa.Column('price', sa.Float(), nullable=False),
-    sa.Column('departure_time', sa.DateTime(), nullable=True),
-    sa.Column('return_time', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user',
@@ -40,11 +38,12 @@ def upgrade():
     op.create_table('bus',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('number_plate', sa.String(), nullable=False),
-    sa.Column('name', sa.String(length=10), nullable=True),
     sa.Column('route_id', sa.Integer(), nullable=False),
     sa.Column('owner_id', sa.Integer(), nullable=False),
-    sa.Column('number_of_seats', sa.Integer(), nullable=False),
+    sa.Column('capacity', sa.Integer(), nullable=False),
+    sa.Column('available_seats', sa.Integer(), nullable=False),
     sa.Column('driver', sa.String(length=20), nullable=False),
+    sa.Column('departure_time', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['owner_id'], ['user.id'], ),
     sa.ForeignKeyConstraint(['route_id'], ['route.id'], ),
     sa.PrimaryKeyConstraint('id'),
@@ -55,8 +54,6 @@ def upgrade():
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('bus_id', sa.Integer(), nullable=False),
     sa.Column('seat_number', sa.Integer(), nullable=False),
-    sa.Column('departure_time', sa.DateTime(), nullable=False),
-    sa.Column('return_time', sa.DateTime(), nullable=True),
     sa.Column('is_confirmed', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['bus_id'], ['bus.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
