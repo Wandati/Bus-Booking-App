@@ -28,7 +28,7 @@ function Navbar() {
               </li>
               <li className="nav-item">
               <Link to="/admin" className="nav-link active"> 
-                Admin dashboard
+                Admin
               </Link>
             </li>
             <li className="nav-item">
@@ -38,7 +38,7 @@ function Navbar() {
             </li>
             <li className="nav-item">
               <Link to="/contact" className="nav-link active">
-                Contact Us
+                Contact
               </Link>
             </li>
             <li className="nav-item">
