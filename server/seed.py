@@ -92,25 +92,25 @@ with app.app_context():
 
     bookings_data = [
         {"user_id": 6, "bus_id": 1, "seat_number": 11},
-        {"user_id": 6, "bus_id": 2, "seat_number": 25},
+        {"user_id": 10, "bus_id": 20, "seat_number": 34},
         {"user_id": 6, "bus_id": 3, "seat_number": 1},
-        {"user_id": 6, "bus_id": 4, "seat_number": 30},
-        {"user_id": 10, "bus_id": 5, "seat_number": 20},
-        {"user_id": 7, "bus_id": 6, "seat_number": 16},
-        {"user_id": 7, "bus_id": 7, "seat_number": 22},
-        {"user_id": 7, "bus_id": 8, "seat_number": 1},
-        {"user_id": 7, "bus_id": 9, "seat_number": 40},
+        {"user_id": 9, "bus_id": 17, "seat_number": 45},
         {"user_id": 8, "bus_id": 10, "seat_number": 50},
-        {"user_id": 8, "bus_id": 11, "seat_number": 30},
+        {"user_id": 6, "bus_id": 4, "seat_number": 30},
+        {"user_id": 7, "bus_id": 7, "seat_number": 22},
+        {"user_id": 10, "bus_id": 5, "seat_number": 20},
+        {"user_id": 6, "bus_id": 2, "seat_number": 25},
+        {"user_id": 7, "bus_id": 8, "seat_number": 1},
         {"user_id": 8, "bus_id": 12, "seat_number": 60},
+        {"user_id": 7, "bus_id": 9, "seat_number": 40},
+        {"user_id": 9, "bus_id": 15, "seat_number": 22},
+        {"user_id": 10, "bus_id": 19, "seat_number": 33},
+        {"user_id": 8, "bus_id": 11, "seat_number": 30},
+        {"user_id": 7, "bus_id": 6, "seat_number": 16},
         {"user_id": 8, "bus_id": 13, "seat_number": 55},
         {"user_id": 9, "bus_id": 14, "seat_number": 16},
-        {"user_id": 9, "bus_id": 15, "seat_number": 22},
         {"user_id": 9, "bus_id": 16, "seat_number": 37},
-        {"user_id": 9, "bus_id": 17, "seat_number": 45},
-        {"user_id": 10, "bus_id": 18, "seat_number": 24},
-        {"user_id": 10, "bus_id": 19, "seat_number": 33},
-        {"user_id": 10, "bus_id": 20, "seat_number": 34}
+        {"user_id": 10, "bus_id": 18, "seat_number": 24}
     ]
 
 
