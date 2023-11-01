@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function SignUpForm() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole] = useState('Customer');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("Customer");
   const [rememberMe, setRememberMe] = useState(false); // Define the rememberMe state
   const [error, setError] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError(null);
-  
+
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
-  
+
     // Create a JSON object to send to the server
     const signUpData = {
       username,
@@ -28,32 +28,31 @@ function SignUpForm() {
       password2: confirmPassword,
       user_type: role,
     };
-  
+
     // Send a POST request with the JSON data
-    fetch('http://127.0.0.1:5500/sign_up', { // Use the correct endpoint URL
-      method: 'POST',
+    fetch("http://127.0.0.1:5500/sign_up", {
+      // Use the correct endpoint URL
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(signUpData), // Send user object as JSON
     })
       .then((response) => {
         if (response.status === 201) {
-          navigate('/login');
+          navigate("/login");
         } else {
-          setError('An error occurred during signup. Please try again.');
+          setError("An error occurred during signup. Please try again.");
         }
       })
       .catch((error) => {
-        setError('An error occurred during signup. Please try again.');
+        setError("An error occurred during signup. Please try again.");
       });
   };
-  
-
 
   return (
-    <div>
-      <h1>Sign Up</h1>
+    <div className="container text-center mt-5 mb-2">
+      {/* <h1>Sign Up</h1> */}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="exampleInputUsername">Username</label>
@@ -66,7 +65,7 @@ function SignUpForm() {
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
-        <div className="form-group">
+        <div className="form-group mt-2">
           <label htmlFor="exampleInputEmail1">Email address</label>
           <input
             type="email"
@@ -81,7 +80,7 @@ function SignUpForm() {
             We'll never share your email with anyone else.
           </small>
         </div>
-        <div className="form-group">
+        <div className="form-group mt-2">
           <label htmlFor="exampleInputPassword1">Password</label>
           <input
             type="password"
@@ -92,7 +91,7 @@ function SignUpForm() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <div className="form-group">
+        <div className="form-group mt-2">
           <label htmlFor="exampleInputConfirmPassword">Confirm Password</label>
           <input
             type="password"
@@ -103,20 +102,19 @@ function SignUpForm() {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </div>
-        <div className="form-group">
-          <label htmlFor="exampleInputRole">Role</label>
+        <div className="form-group mt-2">
+          <label htmlFor="exampleInputRole">Sign Up Options</label>
           <select
             className="form-control"
             id="exampleInputRole"
             value={role}
             onChange={(e) => setRole(e.target.value)}
           >
-            <option value="passenger">Passenger</option>
+            <option value="passenger">Customer</option>
             <option value="BusOwner">BusOwner</option>
-            
           </select>
         </div>
-        <div className="form-check">
+        {/* <div className="form-check">
           <input
             type="checkbox"
             className="form-check-input"
@@ -128,8 +126,8 @@ function SignUpForm() {
             Check me out
           </label>
         </div>
-        {error && <div className="alert alert-danger">{error}</div>}
-        <button type="submit" className="btn btn-primary">
+        {error && <div className="alert alert-danger">{error}</div>} */}
+        <button type="submit" className="btn btn-dark mt-2 mb-2">
           Signup
         </button>
       </form>

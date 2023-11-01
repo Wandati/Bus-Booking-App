@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom'; // Import useLocation from react-router-dom
-import LoginForm from './Login';
-import SignUpForm from './Signup';
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom"; // Import useLocation from react-router-dom
+import LoginForm from "./Login";
+import SignUpForm from "./Signup";
 
 function AuthFormToggle() {
   const [showSignUp, setShowSignUp] = useState(true); // Initialize the state to show SignUp form
   const location = useLocation();
 
   // Conditionally render the toggle only on the sign-up page
-  if (location.pathname !== '/signup') {
+  if (location.pathname !== "/signup") {
     return null; // Don't render the toggle on other pages
   }
 
   return (
     <div>
-      <div>
-        <label>
+      <div className="text-center mt-5">
+        <label className="px-2">
           <input
             type="radio"
             name="authType"

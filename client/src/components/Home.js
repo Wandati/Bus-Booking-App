@@ -5,12 +5,15 @@ function Home() {
   return (
     <>
       <h1 className="text-center mt-4">
-        <marquee width="50%">BOOK YOUR TICKET TODAY!</marquee>
+        <marquee width="50%">BOOK YOUR TICKET TODAY!!!</marquee>
       </h1>
       <div className="home-container">
         <div className="card-container">
           <div className="card" style={{ width: "100%", height: "100vh" }}>
-            <img src="https://i.ytimg.com/vi/MSPj9fWEQEU/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGE8gWyhlMA8=&rs=AOn4CLAXNT-tIq-yNHzorZLbwV1cVFnX1A" />
+            <img
+              src="https://i.ytimg.com/vi/MSPj9fWEQEU/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGE8gWyhlMA8=&rs=AOn4CLAXNT-tIq-yNHzorZLbwV1cVFnX1A"
+              alt="A bus Image"
+            />
             <div className="card-body"></div>
           </div>
         </div>

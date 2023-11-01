@@ -375,6 +375,7 @@ class RoutesById(Resource):
                     "owner":User.query.filter_by(id=bus.owner_id).first().username,
                     "no_of_seats":bus.capacity,
                     "available_seats":bus.available_seats, 
+                    "owner_contact":User.query.filter_by(id=bus.owner_id).first().email,
                     # "number_of_seats":bus.number_of_seats,
                     "driver":bus.driver
                     }
