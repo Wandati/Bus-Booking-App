@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Route = () => {
+const BusRoute = () => {
     const routes = [
         { id: 1, source: 'Nairobi', destination: 'Mombasa', distance: 250 },
         { id: 2, source: 'Naivasha', destination: 'Limuru', distance: 100 },
@@ -25,4 +25,4 @@ const Route = () => {
     );
 };
 
-export default Route;
+export default BusRoute;
