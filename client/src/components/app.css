@@ -8,9 +8,13 @@
 
 footer {
   margin-top: auto;
-  background-color: #333;
-  color: #fff;
+  background-color: #070707;
+  color: #f10909cb;
   padding: 20px;
+}
+
+.footer a:hover {
+  text-decoration: underline;
 }
 
 .home-container {
