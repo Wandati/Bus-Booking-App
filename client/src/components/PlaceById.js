@@ -5,6 +5,17 @@ function PlaceById() {
   const [routeDetails, setRouteDetails] = useState(null);
   const { id } = useParams();
 
+  // const handleBooking=()=>{
+  //   const seatNumber = prompt('Please enter your desired seat number:', ''); // Display a prompt to get the seat number from the user
+  //   if (seatNumber !== null) {
+  //     // Handle the selected seat number, for example, you can use it to make a booking
+  //     alert(`You have selected seat number ${seatNumber}. Booking confirmed!`);
+  //   } else {
+  //     // Handle the case when the user cancels the prompt
+  //     alert('Booking canceled.');
+  //   }
+  // }
+
   useEffect(() => {
     const fetchRouteDetails = async () => {
       try {
@@ -37,7 +48,8 @@ function PlaceById() {
         Available Buses From {routeDetails[0].start_point} To{" "}
         {routeDetails[0].end_point}
       </h1>
-      <div className="row mt-4 mb-2">
+      <h2 className="text-center">Price: {routeDetails[0].price}</h2>
+      <div className="row mt-2 mb-2">
         {routeDetails[0].buses.map((bus) => (
           <div className="col-4 mt-4 mb-4" key={bus.id}>
             <div className="card">
@@ -61,6 +73,7 @@ function PlaceById() {
                   <Link
                     className="text-decoration-none text-white"
                     to={`/bookings/${bus.id}`}
+                    // onClick={handleBooking}
                   >
                     Make A Booking Here
                   </Link>

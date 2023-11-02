@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 function SignUpForm() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
@@ -52,21 +52,20 @@ function SignUpForm() {
 
   return (
     <div className="container text-center mt-5 mb-2">
-      {/* <h1>Sign Up</h1> */}
+      <h1 className="mb-4">Sign Up</h1>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="exampleInputUsername">Username</label>
+        <div className="form-floating">
           <input
             type="text"
             className="form-control"
-            id="exampleInputUsername"
+            id="FloatingInput"
             placeholder="Enter username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
+          <label htmlFor="FloatingInput">Username</label>
         </div>
-        <div className="form-group mt-2">
-          <label htmlFor="exampleInputEmail1">Email address</label>
+        <div className="form-floating mt-2">
           <input
             type="email"
             className="form-control"
@@ -76,12 +75,12 @@ function SignUpForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <small id="emailHelp" className="form-text text-muted">
+          <label htmlFor="exampleInputEmail1">Email address</label>
+          <small id="emailHelp" className="form-text text-muted mt-2">
             We'll never share your email with anyone else.
           </small>
         </div>
-        <div className="form-group mt-2">
-          <label htmlFor="exampleInputPassword1">Password</label>
+        <div className="form-floating mt-2">
           <input
             type="password"
             className="form-control"
@@ -90,9 +89,9 @@ function SignUpForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          <label htmlFor="exampleInputPassword1">Password</label>
         </div>
-        <div className="form-group mt-2">
-          <label htmlFor="exampleInputConfirmPassword">Confirm Password</label>
+        <div className="form-floating mt-2">
           <input
             type="password"
             className="form-control"
@@ -101,6 +100,7 @@ function SignUpForm() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
+          <label htmlFor="exampleInputConfirmPassword">Confirm Password</label>
         </div>
         <div className="form-group mt-2">
           <label htmlFor="exampleInputRole">Sign Up Options</label>
@@ -130,6 +130,12 @@ function SignUpForm() {
         <button type="submit" className="btn btn-dark mt-2 mb-2">
           Signup
         </button>
+        <p>
+          Already Have An Account? Login{" "}
+          <Link className="text-dark" to="/login">
+            Here
+          </Link>
+        </p>
       </form>
     </div>
   );

@@ -1,10 +1,14 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+// import Cookies from "js-cookie";
 
-function LoginForm() {
+function LoginForm({ setIsLoggedIn }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
-  const [error, setError] = useState("");
+
+  const [errors, setErrors] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,7 +18,6 @@ function LoginForm() {
       password,
     };
 
-    // Send a POST request to the login endpoint
     fetch("http://127.0.0.1:5500/login", {
       method: "POST",
       headers: {
@@ -22,67 +25,69 @@ function LoginForm() {
       },
       body: JSON.stringify(user),
     })
-      .then((response) => {
+      .then(async (response) => {
         if (response.status === 200) {
-          // Login successful, perform further actions (e.g., redirect)
-          // You may want to store a token in localStorage or a state management system
+          const { token } = await response.json();
+          localStorage.setItem("token", token);
+          setIsLoggedIn(true);
+          navigate("/");
         } else {
-          // Login failed, handle the error
-          setError("Invalid email or password");
+          setErrors("Invalid email or password");
         }
       })
       .catch((error) => {
-        // Handle any network errors
-        setError("An error occurred while logging in");
+        setErrors("An error occurred while logging in", error);
+        console.log(errors);
       });
   };
 
   return (
-    <div className="container text-center mt-5 mb-2">
-      {/* <h1 className="mb-2">Login</h1> */}
+    <div className="container text-center mt-5 mb-4">
+      <h1 className="mb-4">Login</h1>
+      {errors && (
+        <div className="alert alert-danger alert-dismissible" role="alert">
+          {errors}{" "}
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="exampleInputEmail1">Email address</label>
+        <div className="form-floating mb-3">
           <input
             type="email"
             className="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-            placeholder="Enter email"
+            id="floatingInput"
+            placeholder="name@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          {/* <small id="emailHelp" className="form-text text-muted">
-            We'll never share your email with anyone else.
-          </small> */}
+          <label htmlFor="floatingInput">Email address</label>
         </div>
-        <div className="form-group mt-2">
-          <label htmlFor="exampleInputPassword1">Password</label>
+        <div className="form-floating">
           <input
             type="password"
             className="form-control"
-            id="exampleInputPassword1"
+            id="floatingPassword"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          <label htmlFor="floatingPassword">Password</label>
         </div>
-        {/* <div className="form-check">
-          <input
-            type="checkbox"
-            className="form-check-input"
-            id="exampleCheck1"
-            checked={rememberMe}
-            onChange={(e) => setRememberMe(e.target.checked)}
-          />
-          <label className="form-check-label mb-2" htmlFor="exampleCheck1">
-            Check me out
-          </label>
-        </div>
-        {error && <div className="alert alert-danger">{error}</div>} */}
+
         <button type="submit" className="btn btn-dark mb-2 mt-4">
           Login
         </button>
+        <p>
+          Don't Have An Account? SignUp{" "}
+          <Link className="text-dark" to="/signup">
+            Here
+          </Link>
+        </p>
       </form>
     </div>
   );

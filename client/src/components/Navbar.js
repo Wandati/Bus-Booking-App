@@ -1,10 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Navbar() {
+function Navbar({ isLoggedIn, setIsLoggedIn }) {
   // const filtered_routes = (e) => {
   //   console.log(e);
   // };
+  const handleLogout = () => {
+    // Implement logout logic
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+
+    // Additional logic (e.g., clearing localStorage) can be added here
+  };
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
@@ -44,11 +51,40 @@ function Navbar() {
                 Contact Us
               </Link>
             </li>
-            <li className="nav-item">
+            {isLoggedIn ? (
+              <li className="nav-item">
+                <span
+                  className="nav-link active"
+                  style={{ cursor: "pointer" }}
+                  onClick={handleLogout}
+                >
+                  Logout
+                </span>
+              </li>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <Link to="/signup" className="nav-link active">
+                    Sign-Up
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/login" className="nav-link active">
+                    Login
+                  </Link>
+                </li>
+              </>
+            )}
+            {/* <li className="nav-item">
               <Link to="/signup" className="nav-link active">
                 Sign-Up
               </Link>
             </li>
+            <li className="nav-item">
+              <Link to="/login" className="nav-link active">
+                Login
+              </Link>
+            </li> */}
           </ul>
           {/* <form className="d-flex" role="search">
             <input

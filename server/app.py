@@ -253,6 +253,23 @@ class Buses(Resource):
             return{"Error":str(e)},400
         
 class BusesById(Resource):
+    def get(self,id):
+        bus=Bus.query.filter_by(id=id).first()
+        if not bus:
+            return{"Error":"Bus does not exist"},404
+        return { 
+            "id":bus.id,
+            # "Name":bus.name,
+            "Number Plate":bus.number_plate,
+            "From":Route.query.filter_by(id=bus.route_id).first().start_point,
+            "To":Route.query.filter_by(id=bus.route_id).first().end_point,
+            "Departure_Time":bus.departure_time.strftime('%Y-%m-%d %H:%M:%S '),
+            "no_of_seats":bus.capacity,
+            "available_seats":bus.available_seats,
+            # "Owner":User.query.filter_by(id=bus.owner_id).first().username,
+            # "no_of_seats":bus.number_of_seats,
+            "driver":bus.driver
+        },200
     @jwt_required()
     def patch(self,id):
         user_id=get_jwt_identity()
