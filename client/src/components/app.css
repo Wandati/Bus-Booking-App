@@ -1,21 +1,84 @@
+/* NAVBAR */
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-bottom: 5px solid #C51533;
+}
+
+.nav-center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  max-width: 1170px;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li {
+  margin: 0 15px;
+}
+
+.nav-links li a {
+  color: blue;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  transition: all 0.2s ease-in-out;
+}
+
+.nav-links li a:hover {
+  color: #1cad9f;
+}
 
 
-.footer-clean {
+
+
+/* SEARCHBAR */
+
+.SearchContainer {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  align-items: center;
+  margin-top: 20px;
 }
 
-footer {
-  margin-top: auto;
-  background-color: #070707;
-  color: #f10909cb;
-  padding: 20px;
+.SearchBar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-.footer a:hover {
-  text-decoration: underline;
+.SearchBar-select {
+  margin-left: 10px;
 }
+
+.SearchBar-input {
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  width: 200px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+/* HOME */
 
 .home-container {
   display: flex;
@@ -42,16 +105,16 @@ footer {
   border: solid 1px #dbdad7;
   width: 60%;
   padding-left: 10px!important;
-  padding-bottom: 10px!important;
   padding-right: 10px!important;
+  padding-bottom: 10px!important;
   padding-top: 0px!important;
 }
 
 .card-title {
   margin: auto;
   padding: 15px;
-  background-color: #2f7fad;
   color: white;
+  background-color: #2f7fad;
   width: 80%;
 }
 
@@ -59,148 +122,52 @@ div.card-body {
   padding: 0px;
 }
 
-.custom-select {
+/* FOOTER */
+
+.footer-clean {
+  position: fixed;
+  bottom: 0;
+  left: 0;
   width: 100%;
-}
-
-.btn2 {
-  margin-left: 10%;
-}
-
-input {
-  outline: 0!important;
-  border-width: 0 0 2px!important;
-  border-color: #d1d1cf!important;
-}
-
-input:focus {
-  border-color: #d1d1cf!important;
-  -webkit-box-shadow: none!important;
-  box-shadow: none!important;
-}
-
-select {
-  outline: 0!important;
-  border-width: 0 0 2px!important;
-  border-color: #d1d1cf!important;
-}
-
-select:focus {
-  border-color: #d1d1cf!important;
-  -webkit-box-shadow: none!important;
-  box-shadow: none!important;
-}
-
-.radiobtn {
-  margin-left: 3.5%;
-}
-
-.icons {
-  margin: auto!important;
-}
-
-.fa {
-  border-radius: 25px;
-  width: 10%;
-  margin-left: 5%;
-  border: solid 2px #dbdad7;
-  margin-top: 5%;
-  text-align: center;
-}
-
-.fa-plane {
-  color: #1cad9f;
-}
-
-.fa-taxi {
-  color: #c2f700;
-}
-
-.fa-train {
-  color: red;
-}
-
-/* Social media icons styles */
-
-.item.social i.ion-social-facebook {
-  /* Styles for the Facebook icon */
-  font-size: 24px;
-  margin: 5px;
-  color: #3b5998; /* Facebook's brand color */
-}
-
-.item.social i.ion-social-twitter {
-  /* Styles for the Twitter icon */
-  font-size: 24px;
-  margin: 5px;
-  color: #1da1f2; /* Twitter's brand color */
-}
-
-.item.social i.ion-social-snapchat {
-  /* Styles for the Snapchat icon */
-  font-size: 24px;
-  margin: 5px;
-  color: #fffc00; /* Snapchat's brand color */
-}
-
-.item.social i.ion-social-instagram {
-  /* Styles for the Instagram icon */
-  font-size: 24px;
-  margin: 5px;
-  color: #bc2a8d; /* Instagram's brand color */
-}
-.social-container {
-  background: #eee;
-  padding: 25px 50px;
-}
-a.social {
-  margin: 0 1rem;
-  transition: transform 250ms;
-  display: inline-block;
-}
-a.social:hover {
-  transform: translateY(-2px);
-}
-a.youtube {
-  color: #eb3223;
-}
-
-a.facebook {
-  color: #4968ad;
-}
-
-a.twitter {
-  color: #49a1eb;
-}
-
-a.instagram {
-  color: black;
-}
-a.youtube {
-  color: #eb3223;
-}
-
-a.facebook {
-  color: #4968ad;
-}
-
-a.twitter {
-  color: #49a1eb;
-}
-
-a.instagram {
-  color: black;
-}
-.social-company-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  padding: 20px;
+  background-color: #000000;
+  color: #ffffff;
+  border: 1px solid black;
+  border-radius: 10px;
+  line-height: 0.1;
 }
 
 .social-container {
-  /* Styles for the social links (icons) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.social-container a {
+  margin: 0 10px;
+}
+
+.social-container a.facebook {
+  color: #3b5998;
+}
+
+.social-container a.twitter {
+  color: #1da1f2;
+}
+
+.social-container a.instagram {
+  color: #bc2a8d;
+}
+
+.social-container a.youtube {
+  color: #ff0000;
 }
 
 .company-info {
-  /* Styles for the company information (About, Location, Telephone) */
+  text-align: center;
 }
