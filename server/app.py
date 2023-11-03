@@ -231,7 +231,7 @@ class Buses(Resource):
             return{"Error":f"Bus With Plate_No {number_plate} already exists!!"},401
         try:
             new_departure_time=datetime.strptime(departure_time,'%Y-%m-%d %H:%M:%S')
-            new_bus=Bus(number_plate=number_plate,owner_id=user_id,departure_time=new_departure_time,route_id=route_id,number_of_seats=seats_num,driver=driver)
+            new_bus=Bus(number_plate=number_plate,owner_id=user_id,departure_time=new_departure_time,route_id=route_id,capacity=seats_num,driver=driver)
             db.session.add(new_bus)
             db.session.commit()
             return{
@@ -242,8 +242,8 @@ class Buses(Resource):
                 "From":Route.query.filter_by(id=new_bus.route_id).first().start_point,
                 "To":Route.query.filter_by(id=new_bus.route_id).first().end_point,
                 "Departure_Time":new_bus.departure_time.strftime('%Y-%m-%d %H:%M:%S '),
-                "no_of_seats":bus.capacity,
-                "available_seats":bus.available_seats,
+                "no_of_seats":new_bus.capacity,
+                "available_seats":new_bus.available_seats,
                 # "Owner":User.query.filter_by(id=new_bus.owner_id).first().username,
                 # "no_of_seats":new_bus.number_of_seats,
                 "driver":new_bus.driver
@@ -459,31 +459,62 @@ class RoutesById(Resource):
         },200
         
             
+# class BookingList(Resource):
+    # @jwt_required()
+    # def get(self):
+    #     user_id=get_jwt_identity()
+    #     current_user=User.query.filter_by(id=user_id).first()
+    #     if not current_user.bookings:
+    #         return {"Message":"No Bookings Available.."},404
+    #     elif user_id in  blacklisted_tokens:
+    #         return {"Error":"Unauthorized!!"},400
+    #     else:
+    #         bookings=[
+    #             {
+    #                 "booking_id":booking.id,
+    #                 "bus_id":booking.bus_id,
+    #                 "user_id":booking.user_id,
+    #                 "route_id":Bus.query.filter_by(id=booking.bus_id).first().route_id,
+    #                 "seat_number":booking.seat_number,
+    #                 "departure_time":Bus.query.filter_by(id=booking.bus_id).first().departure_time.strftime('%Y-%m-%d %H:%M:%S '),
+    #                 # "departure_time":booking.departure_time.strftime('%Y-%M-%d %H:%M:%S'),
+    #                 # "return_time":booking.return_time.strftime('%Y-%M-%d %H:%M:%S') if booking.return_time else None,
+    #                 "is_confirmed":booking.is_confirmed
+    #             }
+                
+    #             for booking in current_user.bookings
+    #         ]
+    #     return bookings,200
 class BookingList(Resource):
     @jwt_required()
     def get(self):
-        user_id=get_jwt_identity()
-        current_user=User.query.filter_by(id=user_id).first()
+        user_id = get_jwt_identity()
+        current_user = User.query.filter_by(id=user_id).first()
         if not current_user.bookings:
-            return {"Message":"No Bookings Available.."}
-        elif user_id in  blacklisted_tokens:
-            return {"Error":"Unauthorized!!"},400
+            return {"Message": "No Bookings Available.."}, 404
+        elif user_id in blacklisted_tokens:
+            return {"Error": "Unauthorized!!"}, 400
         else:
-            bookings=[
-                {
-                    "booking_id":booking.id,
-                    "bus_id":booking.bus_id,
-                    "user_id":booking.user_id,
-                    "seat_number":booking.seat_number,
-                    "departure_time":Bus.query.filter_by(id=booking.bus_id).first().departure_time.strftime('%Y-%m-%d %H:%M:%S '),
-                    # "departure_time":booking.departure_time.strftime('%Y-%M-%d %H:%M:%S'),
-                    # "return_time":booking.return_time.strftime('%Y-%M-%d %H:%M:%S') if booking.return_time else None,
-                    "is_confirmed":booking.is_confirmed
+            bookings = []
+            for booking in current_user.bookings:
+                route_id = Bus.query.filter_by(id=booking.bus_id).first().route_id 
+                route=Route.query.filter_by(id=route_id).first()# Access the Route object associated with the booking
+                route_info = {
+                    "booking_id": booking.id,
+                    "bus_id": booking.bus_id,
+                    "user_id": booking.user_id,
+                    "start_point": route.start_point,
+                    "end_point": route.end_point,
+                    "price":route.price,
+                    "seat_number": booking.seat_number,
+                    "departure_time": Bus.query.filter_by(id=booking.bus_id).first().departure_time.strftime('%Y-%m-%d %H:%M:%S '),
+                    "is_confirmed": booking.is_confirmed
                 }
-                
-                for booking in current_user.bookings
-            ]
-        return bookings,200
+                bookings.append(route_info)
+            return {"bookings": bookings}, 200
+
+
+
     @jwt_required()
     def post(self):
         user_id=get_jwt_identity()

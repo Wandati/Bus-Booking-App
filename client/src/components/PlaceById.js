@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 
 function PlaceById() {
   const [routeDetails, setRouteDetails] = useState(null);
+  const [selectedSeat, setSelectedSeat] = useState(null);
   const { id } = useParams();
 
   // const handleBooking=()=>{
@@ -41,6 +42,9 @@ function PlaceById() {
   if (routeDetails.length === 0) {
     return <div>Route not found</div>;
   }
+  const handleSeatSelect = (e) => {
+    setSelectedSeat(e.target.value);
+  };
 
   return (
     <>
@@ -69,10 +73,23 @@ function PlaceById() {
                 <p className="card-text">
                   <strong>Owners_Contact:</strong> {bus.owner_contact}.
                 </p>
-                <button className="btn btn-dark btn-sm">
+                <select className="form-select" onChange={handleSeatSelect}>
+                  <option value="" disabled selected>
+                    Select a Seat
+                  </option>
+                  {Array.from(
+                    { length: bus.available_seats },
+                    (_, index) => index + 1
+                  ).map((seatNumber) => (
+                    <option key={seatNumber} value={seatNumber}>
+                      Seat {seatNumber}
+                    </option>
+                  ))}
+                </select>
+                <button className="btn btn-dark btn-sm mt-2">
                   <Link
                     className="text-decoration-none text-white"
-                    to={`/bookings/${bus.id}`}
+                    to={`/bookings/${bus.id}/${selectedSeat}`}
                     // onClick={handleBooking}
                   >
                     Make A Booking Here

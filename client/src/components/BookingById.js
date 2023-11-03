@@ -13,12 +13,7 @@ function BookingById() {
       });
   }, [id]);
 
-  return (
-    <div>
-      <h1 className="text-center">Please Confirm Your Booking details Here</h1>
-       
-    </div>
-  );
+  return <div className="container"></div>;
 }
 
 export default BookingById;

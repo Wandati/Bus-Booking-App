@@ -14,6 +14,7 @@ import PlaceById from "./components/PlaceById";
 import Bus from "./components/Bus";
 import SignUpForm from "./components/Signup";
 import BookingById from "./components/BookingById";
+import Booking from "./components/Booking";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
@@ -33,6 +34,8 @@ function App() {
               path="/login"
               element={<LoginForm setIsLoggedIn={setIsLoggedIn} />}
             />
+
+            <Route path="/bookings/" element={<Booking/>} />
             <Route path="/bookings/:id" element={<BookingById />} />
             <Route path="/signup" element={<SignUpForm />} />
           </Routes>

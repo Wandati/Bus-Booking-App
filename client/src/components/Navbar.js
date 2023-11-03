@@ -32,8 +32,8 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link to="/admin" className="nav-link active">
-                Admin dashboard
+              <Link to="/routes" className="nav-link active">
+                Routes
               </Link>
             </li>
             <li className="nav-item">
@@ -42,25 +42,33 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/routes" className="nav-link active">
-                Routes
-              </Link>
-            </li>
-            <li className="nav-item">
               <Link to="/contact" className="nav-link active">
                 Contact Us
               </Link>
             </li>
             {isLoggedIn ? (
-              <li className="nav-item">
-                <span
-                  className="nav-link active"
-                  style={{ cursor: "pointer" }}
-                  onClick={handleLogout}
-                >
-                  Logout
-                </span>
-              </li>
+              <>
+                <li className="nav-item">
+                  <Link to="/admin" className="nav-link active">
+                    Admin dashboard
+                  </Link>
+                </li>
+
+                <li className="nav-item">
+                  <Link to="/bookings" className="nav-link active">
+                    My Bookings
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <span
+                    className="nav-link active"
+                    style={{ cursor: "pointer" }}
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </span>
+                </li>
+              </>
             ) : (
               <>
                 <li className="nav-item">
