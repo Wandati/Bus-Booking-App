@@ -25,13 +25,13 @@ class SignUp(Resource):
             data=request.get_json()
             username=data['username']
             email=data['email']
-            password1=data['password1']
-            password2=data['password2']
-            user_type=data['user_type']
+            password1=data['password']
+            password2=data['confirmPassword']
+            user_type=data['role']
             if User.query.filter_by(username=username).first() or User.query.filter_by(email=email).first():
                 return {"Error":"Username Already Exists"},401
             elif not(password1 == password2):
-                return {"Error":"Passwords Do not Match!!"},401
+                return {"Error":"Passwords Do not Match!!"},400
             else:
                 new_user=User(username=username,email=email,password=generate_password_hash(password1),user_type=user_type)
                 db.session.add(new_user)
