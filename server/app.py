@@ -8,7 +8,7 @@ from flask_restful import Resource
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from flask import jsonify, request
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
+from datetime import datetime,timedelta
 blacklisted_tokens = set()
 
 
@@ -47,7 +47,7 @@ class Login(Resource):
         
         user=User.query.filter_by(email=email).first()
         if user and check_password_hash(user.password,password):
-            token = create_access_token(identity=user.id)
+            token = create_access_token(identity=user.id,expires_delta=timedelta(days=7))
             blacklisted_tokens.clear()
             return {"Message":"Login Successful!!","token":token},200
         else:
@@ -521,27 +521,27 @@ class BookingList(Resource):
         data=request.get_json()
         bus_id=data['bus_id']
         seat_number=data['seat_number']
-        is_confirmed=data['is_confirmed']
+        # is_confirmed=data['is_confirmed']
         
         bus=Bus.query.filter_by(id=bus_id).first()
-        existing_booking = Booking.query.filter_by(user_id=user_id,bus_id=bus_id).first()
-        existing_seat=Booking.query.filter_by(bus_id=bus_id).first()
+        # existing_booking = Booking.query.filter_by(user_id=user_id,bus_id=bus_id).first()
+        existing_seat=Booking.query.filter_by(bus_id=bus_id,seat_number=seat_number).first()
         if not bus:
-            return {"Error":"Bus Does not exist"}
-        elif existing_booking:
-            return {"Error":"Booking Already Exists.."}
+            return {"Error":"Bus Does not exist"},404
+        elif existing_seat:
+            return {"Error":"Seat Has Already Been Booked..."},401
         elif user_id in blacklisted_tokens:
             return {"Error":"Unauthorized!!"},400
-        elif seat_number == existing_seat.seat_number:
-            return {"Error":"Seat Has Already Been Booked."}
+        # elif seat_number == existing_seat.seat_number:
+        #     return {"Error":"Seat Has Already Been Booked."},401
         else:
             try:
-                new_booking=Booking(user_id=user_id,bus_id=bus_id,seat_number=seat_number,is_confirmed=is_confirmed)
+                new_booking=Booking(user_id=user_id,bus_id=bus_id,seat_number=seat_number)
                 db.session.add(new_booking)
                 bus.available_seats-=1
                 db.session.commit()
                 
-                return {
+                new_book_details={
                     "booking_id":new_booking.id,
                     "user_id":new_booking.user_id,
                     "bus_id":new_booking.bus_id,
@@ -550,7 +550,8 @@ class BookingList(Resource):
                     # "departure_time":new_booking.departure_time.strftime('%Y-%M-%d %H:%M:%S'),
                     # "return_time":new_booking.return_time.strftime('%Y-%M-%d %H:%M:%S') if new_booking.return_time else None,
                     "is_confirmed":new_booking.is_confirmed
-                },201
+                }
+                return new_book_details,201
             except Exception as e:
                 return {"error":str(e)},401
       
@@ -589,30 +590,34 @@ class BookingById(Resource):
         elif booking not in user.bookings:
             return {"error":"Unauthorized to perform this action."},401
         else:
-            data=request.get_json()
-            seat_number=data["seat_number"]
-            is_confirmed=data["is_confirmed"]
-            existing_seat=Booking.query.filter_by(bus_id=booking.bus_id,seat_number=seat_number).first()
-            if existing_seat:
-                return {"Error":"Seat Has already been booked.."},400
-            # # for attr in data:
-            # #     setattr(booking,attr,data[attr])
-            # for attr in request.get_json():
-            #     setattr(booking,attr,request.json[attr])
-            booking.seat_number=seat_number
-            booking.is_confirmed=is_confirmed
-            # db.session.add(booking)
-            db.session.commit()
-            return {  
-                "booking_id":booking.id,
-                "user_id":booking.user_id,
-                "bus_id":booking.bus_id,
-                "seat_number":booking.seat_number,
-                "departure_time":Bus.query.filter_by(id=booking.bus_id).first().departure_time.strftime('%Y-%m-%d %H:%M:%S '),
-                # "departure_time":booking.departure_time.strftime('%Y-%M-%d %H:%M:%S'),
-                # "return_time":booking.return_time.strftime('%Y-%M-%d %H:%M:%S') if booking.return_time else None,
-                "is_confirmed":booking.is_confirmed
-        },200
+            try:
+                
+                data=request.get_json()
+                seat_number=data["seat_number"]
+                # is_confirmed=data["is_confirmed"]
+                existing_seat=Booking.query.filter_by(bus_id=booking.bus_id,seat_number=seat_number).first()
+                if existing_seat:
+                    return {"Error":"Seat Has already been booked.."},403
+                # # for attr in data:
+                # #     setattr(booking,attr,data[attr])
+                # for attr in request.get_json():
+                #     setattr(booking,attr,request.json[attr])
+                booking.seat_number=seat_number
+                # booking.is_confirmed=is_confirmed
+                # db.session.add(booking)
+                db.session.commit()
+                return {  
+                    "booking_id":booking.id,
+                    "user_id":booking.user_id,
+                    "bus_id":booking.bus_id,
+                    "seat_number":booking.seat_number,
+                    "departure_time":Bus.query.filter_by(id=booking.bus_id).first().departure_time.strftime('%Y-%m-%d %H:%M:%S '),
+                    # "departure_time":booking.departure_time.strftime('%Y-%M-%d %H:%M:%S'),
+                    # "return_time":booking.return_time.strftime('%Y-%M-%d %H:%M:%S') if booking.return_time else None,
+                    "is_confirmed":booking.is_confirmed
+            },200
+            except Exception as e:
+                return ({"Error":str(e)}),401
     @jwt_required()
     def delete(self,id):
         user_id=get_jwt_identity()

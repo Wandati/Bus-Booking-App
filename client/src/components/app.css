@@ -1,5 +1,3 @@
-
-
 .footer-clean {
   display: flex;
   flex-direction: column;
@@ -37,10 +35,10 @@ footer {
   margin: auto;
   border: solid 1px #dbdad7;
   width: 60%;
-  padding-left: 10px!important;
-  padding-bottom: 10px!important;
-  padding-right: 10px!important;
-  padding-top: 0px!important;
+  padding-left: 10px !important;
+  padding-bottom: 10px !important;
+  padding-right: 10px !important;
+  padding-top: 0px !important;
 }
 
 .card-title {
@@ -64,27 +62,27 @@ div.card-body {
 }
 
 input {
-  outline: 0!important;
-  border-width: 0 0 2px!important;
-  border-color: #d1d1cf!important;
+  outline: 0 !important;
+  border-width: 0 0 2px !important;
+  border-color: #d1d1cf !important;
 }
 
 input:focus {
-  border-color: #d1d1cf!important;
-  -webkit-box-shadow: none!important;
-  box-shadow: none!important;
+  border-color: #d1d1cf !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
 }
 
 select {
-  outline: 0!important;
-  border-width: 0 0 2px!important;
-  border-color: #d1d1cf!important;
+  outline: 0 !important;
+  border-width: 0 0 2px !important;
+  border-color: #d1d1cf !important;
 }
 
 select:focus {
-  border-color: #d1d1cf!important;
-  -webkit-box-shadow: none!important;
-  box-shadow: none!important;
+  border-color: #d1d1cf !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
 }
 
 .radiobtn {
@@ -92,7 +90,7 @@ select:focus {
 }
 
 .icons {
-  margin: auto!important;
+  margin: auto !important;
 }
 
 .fa {
@@ -145,10 +143,10 @@ select:focus {
   margin: 5px;
   color: #bc2a8d; /* Instagram's brand color */
 }
-.social-container {
+/* .social-container {
   background: #eee;
   padding: 25px 50px;
-}
+} */
 a.social {
   margin: 0 1rem;
   transition: transform 250ms;
@@ -193,10 +191,52 @@ a.instagram {
   justify-content: space-between;
 }
 
+
+
+/* .footer-clean {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #000000;
+  color: #ffffff;
+  border: 1px solid black;
+  border-radius: 10px;
+  line-height: 0.1;
+}
+
 .social-container {
-  /* Styles for the social links (icons) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.social-container a {
+  margin: 0 10px;
+}
+
+.social-container a.facebook {
+  color: #3b5998;
+}
+
+.social-container a.twitter {
+  color: #1da1f2;
+}
+
+.social-container a.instagram {
+  color: #bc2a8d;
+}
+
+.social-container a.youtube {
+  color: #ff0000;
 }
 
 .company-info {
-  /* Styles for the company information (About, Location, Telephone) */
-}
+  text-align: center;
+} */

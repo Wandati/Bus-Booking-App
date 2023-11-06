@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./components/Home";
@@ -15,8 +15,17 @@ import Bus from "./components/Bus";
 import SignUpForm from "./components/Signup";
 import BookingById from "./components/BookingById";
 import Booking from "./components/Booking";
+import Payment from "./components/Payment";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
   return (
     <Router>
       <div>
@@ -30,12 +39,13 @@ function App() {
             <Route path="/routes" element={<Place />} />
             <Route path="/buses" element={<Bus />} />
             <Route path="/routes/:id" element={<PlaceById />} />
+            <Route path="/payments/:id" element={<Payment />} />
             <Route
               path="/login"
               element={<LoginForm setIsLoggedIn={setIsLoggedIn} />}
             />
 
-            <Route path="/bookings/" element={<Booking/>} />
+            <Route path="/bookings/" element={<Booking />} />
             <Route path="/bookings/:id" element={<BookingById />} />
             <Route path="/signup" element={<SignUpForm />} />
           </Routes>

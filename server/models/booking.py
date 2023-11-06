@@ -12,7 +12,7 @@ class Booking(db.Model):
     
     @validates('seat_number')
     def validate_seat_number(self,key,seat_number):
-        if not(1<=seat_number<=70):
+        if not(1<=int(seat_number)<=70):
             raise ValueError("Seat number should be between 1 and 70")
         return seat_number
     

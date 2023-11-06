@@ -77,7 +77,7 @@ function Home() {
               </div>
               <div className="row">
                 <div className="col-sm-6">
-                  <label for="Departure time">Departure:</label>
+                  <label htmlFor="Departure time">Departure:</label>
                   <input
                     type="datetime-local"
                     id="depaturetime"
