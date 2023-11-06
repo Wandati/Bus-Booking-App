@@ -9,7 +9,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from flask import jsonify, request
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime,timedelta
-blacklisted_tokens = set()
+
 
 
 blacklisted_tokens = set()
@@ -367,7 +367,42 @@ class Routes(Resource):
             return {
                 "Error":str(e)
             },401
+class FilteredRoutes(Resource):
+    def get(self):
+        start_point=request.args.get('start').capitalize()   
+        end_point=request.args.get('stop').capitalize()
+        route = Route.query.filter_by(start_point=start_point,end_point=end_point).first()
+        if not route:
+            return {'Error':"Route Not Found"},401
+        route_details=[
+            {
+                "route_id":route.id,
+                "start_point":route.start_point,
+                "end_point":route.end_point,
+                "price":route.price,
+                # "departure_time":route.departure_time.strftime('%Y-%m-%d %H:%M:%S'),
+                # "return_time":route.return_time.strftime('%Y-%m-%d %H:%M:%S') if route.return_time else None,
+                "buses":[
+                    {
+                    "id":bus.id,
+                    # "name":bus.name,
+                    "number_plate":bus.number_plate,
+                    "Departure_Time":bus.departure_time.strftime('%Y-%m-%d %H:%M:%S '),
+                    "owner_id":bus.owner_id,
+                    "owner":User.query.filter_by(id=bus.owner_id).first().username,
+                    "no_of_seats":bus.capacity,
+                    "available_seats":bus.available_seats, 
+                    "owner_contact":User.query.filter_by(id=bus.owner_id).first().email,
+                    # "number_of_seats":bus.number_of_seats,
+                    "driver":bus.driver
+                    }
+                    for bus in route.buses
+                ]
+            }
         
+        ]
+        return route_details,200
+              
 class RoutesById(Resource):
     def get(self,id):
         route=Route.query.filter_by(id=id).first()
@@ -649,7 +684,7 @@ api.add_resource(BusesById,'/buses/<int:id>',endpoint='/buses/<int:id>')
 api.add_resource(RoutesById,'/routes/<int:id>',endpoint='/routes/<int:id>')
 api.add_resource(BookingList,'/bookings',endpoint='/bookings')
 api.add_resource(BookingById,'/bookings/<int:id>',endpoint='/bookings/<int:id>')
-
+api.add_resource(FilteredRoutes,'/routes/',endpoint='/routes/')
     
 
 if __name__ == "__main__":
