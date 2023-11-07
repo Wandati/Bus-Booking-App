@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 function PlaceById() {
   const [routeDetails, setRouteDetails] = useState(null);
   const [selectedSeat, setSelectedSeat] = useState(null);
+  const [errors, setErrors] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -56,7 +57,10 @@ function PlaceById() {
         alert("Booking has been placed. Proceeding to Payment...");
         navigate(`/payments/${busId}`);
       } else if (response.status === 401) {
-        alert("Seating Has Already been booked...");
+        setErrors(
+          "Seat Number Has Already Been Booked.Please Choose Another one..."
+        );
+        // alert("Seating Has Already been booked...");
         // } else if (responseJson.error === "Seat Has Already Been Booked...") {
         //   alert("Seat has already been booked. Please choose another one.");
       } else {
@@ -82,6 +86,17 @@ function PlaceById() {
         {routeDetails[0]?.end_point}
       </h1>
       <h2 className="text-center">Price: {routeDetails[0]?.price}</h2>
+      {errors && (
+        <div className="alert alert-danger alert-dismissible" role="alert">
+          {errors}{" "}
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+      )}
       <div className="row mt-2 mb-2">
         {routeDetails[0]?.buses.map((bus) => (
           <div className="col-4 mt-4 mb-4" key={bus.id}>

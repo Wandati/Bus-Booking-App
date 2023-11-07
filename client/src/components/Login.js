@@ -1,45 +1,52 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-// import Cookies from "js-cookie";
-
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { useState } from "react";
 function LoginForm({ setIsLoggedIn }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const [errors, setErrors] = useState("");
   const navigate = useNavigate();
+  const [errors, setErrors] = useState("");
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .email("Invalid email address")
+        .required("Email is required"),
+      password: Yup.string().required("Password is required"),
+    }),
+    onSubmit: (values) => {
+      const user = {
+        email: values.email,
+        password: values.password,
+      };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const user = {
-      email,
-      password,
-    };
-
-    fetch("http://127.0.0.1:5500/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    })
-      .then(async (response) => {
-        if (response.status === 200) {
-          const { token } = await response.json();
-          localStorage.setItem("token", token);
-          setIsLoggedIn(true);
-          navigate("/");
-        } else {
-          setErrors("Invalid email or password");
-        }
+      fetch("http://127.0.0.1:5500/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
       })
-      .catch((error) => {
-        setErrors("An error occurred while logging in", error);
-        console.log(errors);
-      });
-  };
+        .then(async (response) => {
+          if (response.status === 200) {
+            const { token } = await response.json();
+            localStorage.setItem("token", token);
+            setIsLoggedIn(true);
+            navigate("/");
+          } else {
+            // Handle login errors
+            setErrors("Invalid Username or Password!");
+          }
+        })
+        .catch((error) => {
+          // Handle network or server errors
+          setErrors("There Was an Issue logging in", error);
+        });
+    },
+  });
 
   return (
     <div className="container text-center mt-5 mb-4">
@@ -55,28 +62,38 @@ function LoginForm({ setIsLoggedIn }) {
           ></button>
         </div>
       )}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={formik.handleSubmit}>
         <div className="form-floating mb-3">
           <input
             type="email"
-            className="form-control"
-            id="floatingInput"
+            className={`form-control ${
+              formik.touched.email && formik.errors.email ? "is-invalid" : ""
+            }`}
+            id="email"
             placeholder="name@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            {...formik.getFieldProps("email")}
           />
-          <label htmlFor="floatingInput">Email address</label>
+          <label htmlFor="email">Email address</label>
+          {formik.touched.email && formik.errors.email && (
+            <div className="invalid-feedback">{formik.errors.email}</div>
+          )}
         </div>
-        <div className="form-floating">
+        <div className="form-floating mb-3">
           <input
             type="password"
-            className="form-control"
-            id="floatingPassword"
+            className={`form-control ${
+              formik.touched.password && formik.errors.password
+                ? "is-invalid"
+                : ""
+            }`}
+            id="password"
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...formik.getFieldProps("password")}
           />
-          <label htmlFor="floatingPassword">Password</label>
+          <label htmlFor="password">Password</label>
+          {formik.touched.password && formik.errors.password && (
+            <div className="invalid-feedback">{formik.errors.password}</div>
+          )}
         </div>
 
         <button type="submit" className="btn btn-dark mb-2 mt-4">

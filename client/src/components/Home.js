@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 // import { useHistory } from "react-router-dom";
-import "./app.css";
+// import "./App.css";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 function Home() {
@@ -9,6 +9,7 @@ function Home() {
   const [pickupLocations, setPickupLocations] = useState([]);
   const [destinations, setDestinations] = useState([]);
   const [routeDetails, setRouteDetails] = useState([]);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
     fetch("http://127.0.0.1:5500/routes")
@@ -64,7 +65,8 @@ function Home() {
         }
       } else {
         console.error("Failed to fetch route details");
-        alert("Route Does not exist...");
+        // alert("Route Does not exist...");
+        setError("Route Does Not Exist..");
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -73,15 +75,14 @@ function Home() {
 
   return (
     <>
-      <h1 className="text-center mt-4">
-        <marquee width="50%">BOOK YOUR TICKET TODAY!!!</marquee>
-      </h1>
+
+      <h1 className="text-center mt-4">BOOK YOUR TICKET TODAY!!!</h1>
       <div className="home-container">
         <div className="card-container">
           <div className="card" style={{ width: "100%", height: "100vh" }}>
             <img
               src="https://i.ytimg.com/vi/MSPj9fWEQEU/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGE8gWyhlMA8=&rs=AOn4CLAXNT-tIq-yNHzorZLbwV1cVFnX1A"
-              alt="A bus Image"
+              alt="Bus"
             />
             <div className="card-body">
               <p className="mt-3">
@@ -118,6 +119,17 @@ function Home() {
               <p className="card-title text-center shadow mb-5 rounded">
                 Travel Booking Form
               </p>
+              {error && (
+        <div className="alert alert-danger alert-dismissible" role="alert">
+          {error}{" "}
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+      )}
               <div className="icons text-center">
                 <i className="fa fa-plane fa-2x" aria-hidden="true"></i>
                 <i className="fa fa-taxi fa-2x" aria-hidden="true"></i>

@@ -1,14 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Navbar({ isLoggedIn, setIsLoggedIn }) {
   // const filtered_routes = (e) => {
   //   console.log(e);
   // };
+  const navigate = useNavigate();
   const handleLogout = () => {
     // Implement logout logic
     localStorage.removeItem("token");
     setIsLoggedIn(false);
+    navigate("/");
 
     // Additional logic (e.g., clearing localStorage) can be added here
   };
@@ -48,11 +50,40 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
             </li>
             {isLoggedIn ? (
               <>
-                <li className="nav-item">
+                <li className="nav-item dropdown ">
+                  <a
+                    className="nav-link dropdown-toggle"
+                    href="#"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Dashboards
+                  </a>
+                  <ul className="dropdown-menu">
+                    <li>
+                      {" "}
+                      <Link to="/admin" className="dropdown-item">
+                        Admin dashboard
+                      </Link>
+                    </li>
+
+                    <li>
+                      <hr className="dropdown-divider" />
+                    </li>
+                    <li>
+                      {" "}
+                      <Link to="/admin" className="dropdown-item">
+                        Bus-Owner
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+                {/* <li className="nav-item">
                   <Link to="/admin" className="nav-link active">
                     Admin dashboard
                   </Link>
-                </li>
+                </li> */}
 
                 <li className="nav-item">
                   <Link to="/bookings" className="nav-link active">
