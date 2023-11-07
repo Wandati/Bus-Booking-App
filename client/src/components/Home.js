@@ -75,7 +75,6 @@ function Home() {
 
   return (
     <>
-
       <h1 className="text-center mt-4">BOOK YOUR TICKET TODAY!!!</h1>
       <div className="home-container">
         <div className="card-container">
@@ -102,10 +101,12 @@ function Home() {
             </div>
           </div>
           <p className="mt-2">
-            Get Started With Us{" "}
-            <Link className="text-dark" to="/signup">
-              Here
-            </Link>
+            <strong>
+              Get Started With Us{" "}
+              <Link className="text-dark" to="/signup">
+                Here
+              </Link>
+            </strong>
           </p>
         </div>
 
@@ -120,16 +121,19 @@ function Home() {
                 Travel Booking Form
               </p>
               {error && (
-        <div className="alert alert-danger alert-dismissible" role="alert">
-          {error}{" "}
-          <button
-            type="button"
-            className="btn-close"
-            data-bs-dismiss="alert"
-            aria-label="Close"
-          ></button>
-        </div>
-      )}
+                <div
+                  className="alert alert-danger alert-dismissible"
+                  role="alert"
+                >
+                  {error}{" "}
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              )}
               <div className="icons text-center">
                 <i className="fa fa-plane fa-2x" aria-hidden="true"></i>
                 <i className="fa fa-taxi fa-2x" aria-hidden="true"></i>
@@ -176,7 +180,7 @@ function Home() {
                       ))}
                     </select>
                   </div>
-                  <button className="btn btn-outline-dark btn-sm">
+                  <button className="btn btn-outline-dark btn-sm p-2">
                     Find Buses
                   </button>
                 </div>
