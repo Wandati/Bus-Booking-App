@@ -1,5 +1,5 @@
 from config import jwt, app, db, api
-
+from flask_cors import CORS
 from models.booking import Booking
 from models.bus import Bus
 from models.user import User
@@ -10,7 +10,7 @@ from flask import jsonify, request
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime,timedelta
 
-
+CORS(app)
 
 blacklisted_tokens = set()
 class Home(Resource):
@@ -589,7 +589,26 @@ class BookingList(Resource):
                 return new_book_details,201
             except Exception as e:
                 return {"error":str(e)},401
-      
+class ConfirmBooking(Resource):
+    @jwt_required()
+    def put(self):
+        booking=Booking.query.filter_by(id=request.args.get('booking_id')).first()
+        if not booking:
+            return {"Error":"Booking Not Found!"},404
+        booking.is_confirmed=True
+        db.session.commit()
+        return {  
+                "booking_id":booking.id,
+                "user_id":booking.user_id,
+                "bus_id":booking.bus_id,
+                "seat_number":booking.seat_number,
+                "departure_time":Bus.query.filter_by(id=booking.bus_id).first().departure_time.strftime('%Y-%m-%d %H:%M:%S '),
+                # "departure_time":booking.departure_time.strftime('%Y-%M-%d %H:%M:%S'),
+                # "return_time":booking.return_time.strftime('%Y-%M-%d %H:%M:%S') if booking.return_time else None,
+                "is_confirmed":booking.is_confirmed
+        },200
+        
+               
 class BookingById(Resource):
     @jwt_required()
     def get(self,id):
@@ -685,6 +704,7 @@ api.add_resource(RoutesById,'/routes/<int:id>',endpoint='/routes/<int:id>')
 api.add_resource(BookingList,'/bookings',endpoint='/bookings')
 api.add_resource(BookingById,'/bookings/<int:id>',endpoint='/bookings/<int:id>')
 api.add_resource(FilteredRoutes,'/routes/',endpoint='/routes/')
+api.add_resource(ConfirmBooking,'/confirm_booking',endpoint='/confirm_booking')
     
 
 if __name__ == "__main__":

@@ -52,10 +52,12 @@ function PlaceById() {
       });
       const responseJson = await response.json();
       console.log(responseJson);
+      const booking_id = responseJson["booking_id"];
+      console.log(responseJson["booking_id"]);
 
       if (response.status === 201) {
         alert("Booking has been placed. Proceeding to Payment...");
-        navigate(`/payments/${busId}`);
+        navigate(`/payments/${booking_id}`);
       } else if (response.status === 401) {
         setErrors(
           "Seat Number Has Already Been Booked.Please Choose Another one..."
@@ -86,17 +88,19 @@ function PlaceById() {
         {routeDetails[0]?.end_point}
       </h1>
       <h2 className="text-center">Price: {routeDetails[0]?.price}</h2>
-      {errors && (
-        <div className="alert alert-danger alert-dismissible" role="alert">
-          {errors}{" "}
-          <button
-            type="button"
-            className="btn-close"
-            data-bs-dismiss="alert"
-            aria-label="Close"
-          ></button>
-        </div>
-      )}
+      <div className="container">
+        {errors && (
+          <div className="alert alert-danger alert-dismissible" role="alert">
+            {errors}{" "}
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+            ></button>
+          </div>
+        )}
+      </div>
       <div className="row mt-2 mb-2">
         {routeDetails[0]?.buses.map((bus) => (
           <div className="col-4 mt-4 mb-4" key={bus.id}>

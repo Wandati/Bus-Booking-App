@@ -3,7 +3,7 @@ from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from models.dbconfig import db
 from flask_restful import Api
-from flask_cors import CORS
+
 
 app=Flask(__name__)
 app.config["SECRET_KEY"]="5b86bc3b8eb3b59930d5341c"
@@ -15,4 +15,3 @@ db.init_app(app)
 api=Api(app)
 jwt=JWTManager(app)
 jwt.init_app(app)
-cors=CORS(app)
