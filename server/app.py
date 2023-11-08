@@ -605,8 +605,12 @@ class BookingList(Resource):
 class ConfirmBooking(Resource):
     @jwt_required()
     def put(self):
+        user_id=get_jwt_identity()
         booking=Booking.query.filter_by(id=request.args.get('booking_id')).first()
-        if not booking:
+        user=User.query.filter_by(id=user_id).first()
+        if not(user.user_type == "Customer"):
+            return {"Error":"Forbidden"},403
+        elif not booking:
             return {"Error":"Booking Not Found!"},404
         booking.is_confirmed=True
         db.session.commit()
