@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -123,8 +122,10 @@ function SignUpForm() {
             {formik.errors.confirmPassword}
           </div>
         </div>
-        <div className="form-group mt-2">
-          <label htmlFor="role">Sign Up Options</label>
+        <div className="form-group mt-2 ">
+          <label className="mb-2" htmlFor="role">
+            Sign Up Options
+          </label>
           <select
             className="form-control"
             id="role"

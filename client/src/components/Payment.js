@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-function Payment() {
+function Payment({ userRole }) {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
-    if (!token) {
+    if (!token || userRole !== "Customer") {
       navigate("/");
     }
-  }, [token, navigate]);
+  }, [token, navigate, userRole]);
   const handlePayment = () => {
     fetch(`http://127.0.0.1:5500/confirm_booking?booking_id=${id}`, {
       method: "PUT",

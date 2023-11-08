@@ -118,6 +118,7 @@ class UsersById(Resource):
             return user_details,200
         else:
             
+        
             user_details=[
                 {
                     
@@ -129,8 +130,10 @@ class UsersById(Resource):
                         {
                             
                             "id":booking.id,
-                            # "By":User.query.filter_by(id=booking.user_id).first().username,
+                            "By":User.query.filter_by(id=booking.user_id).first().username,
                             "bus_id":booking.bus_id,
+                            "From":Bus.query.filter_by(id=booking.bus_id).first().route.start_point,
+                            "To":Bus.query.filter_by(id=booking.bus_id).first().route.end_point,
                             # "departure_time":booking.departure_time.strftime('%Y:%M:%d %H:%M:%S '),
                             "departure_time":Bus.query.filter_by(id=booking.bus_id).first().departure_time.strftime('%Y-%m-%d %H:%M:%S '),
                             # "return_time":booking.return_time.strftime('%Y:%M:%d %H:%M:%S ') if booking.return_time else None,

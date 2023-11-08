@@ -64,9 +64,9 @@ import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import About from "./components/About";
 import Contact from "./components/Contact";
-import Admin from "./components/Admin";
+// import Admin from "./components/Admin";
 import LoginForm from "./components/Login";
-// import Footer from "./components/Footer"; //
+// import Footer from "./components/Footer";
 import Place from "./components/Place";
 import PlaceById from "./components/PlaceById";
 import Bus from "./components/Bus";
@@ -74,11 +74,14 @@ import SignUpForm from "./components/Signup";
 import BookingById from "./components/BookingById";
 import Booking from "./components/Booking";
 import Payment from "./components/Payment";
+import ADasboard from "./ADasboard";
+import Users from "./components/Users";
+import UsersById from "./components/UsersById";
 import "./App.css";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const[userRole,setUserRole]=useState('')
+  const [userRole, setUserRole] = useState("");
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -91,25 +94,40 @@ function App() {
     <Router>
       <div className="wrapper">
         <div className="content">
-          <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userRole={userRole} />
+          <Navbar
+            isLoggedIn={isLoggedIn}
+            setIsLoggedIn={setIsLoggedIn}
+            userRole={userRole}
+          />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/admin" element={<Admin />} />
             <Route path="/routes" element={<Place />} />
+            <Route path="/admin" element={<ADasboard />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/users/:id" element={<UsersById />} />
             <Route path="/buses" element={<Bus />} />
             <Route path="/routes/:id" element={<PlaceById />} />
-            <Route path="/payments/:id" element={<Payment />} />
+            <Route
+              path="/payments/:id"
+              element={<Payment userRole={userRole} />}
+            />
             <Route
               path="/login"
-              element={<LoginForm setIsLoggedIn={setIsLoggedIn} setUserRole={setUserRole}/>}
+              element={
+                <LoginForm
+                  setIsLoggedIn={setIsLoggedIn}
+                  setUserRole={setUserRole}
+                />
+              }
             />
             <Route path="/bookings/" element={<Booking />} />
             <Route path="/bookings/:id" element={<BookingById />} />
             <Route path="/signup" element={<SignUpForm />} />
           </Routes>
         </div>
+        {/* <Footer /> */}
       </div>
     </Router>
   );
