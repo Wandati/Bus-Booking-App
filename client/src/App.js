@@ -78,6 +78,7 @@ import "./App.css";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const[userRole,setUserRole]=useState('')
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -90,7 +91,7 @@ function App() {
     <Router>
       <div className="wrapper">
         <div className="content">
-          <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+          <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userRole={userRole} />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
@@ -102,7 +103,7 @@ function App() {
             <Route path="/payments/:id" element={<Payment />} />
             <Route
               path="/login"
-              element={<LoginForm setIsLoggedIn={setIsLoggedIn} />}
+              element={<LoginForm setIsLoggedIn={setIsLoggedIn} setUserRole={setUserRole}/>}
             />
             <Route path="/bookings/" element={<Booking />} />
             <Route path="/bookings/:id" element={<BookingById />} />

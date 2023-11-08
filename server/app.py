@@ -49,7 +49,7 @@ class Login(Resource):
         if user and check_password_hash(user.password,password):
             token = create_access_token(identity=user.id,expires_delta=timedelta(days=7))
             blacklisted_tokens.clear()
-            return {"Message":"Login Successful!!","token":token},200
+            return {"Message":"Login Successful!!","token":token,"User_Role":user.user_type},200
         else:
             return {"Error":"Invalid Email or Password!!"},401
         
@@ -283,9 +283,18 @@ class BusesById(Resource):
             return {"Error":"Bus does not exist!!"},401
         elif bus not in user.buses:
             return {"Error":"Unauthorization error!!"},401
-        for attr in request.get_json():
-            setattr(bus,attr,request.json[attr])
-        db.session.add(bus)
+        data=request.get_json()
+        route_id=data['route_id']
+        departure_time=data['departure_time']
+        driver=data['driver']
+        capacity=data['capacity']
+        # for attr in request.get_json():
+        #     setattr(bus,attr,request.json[attr])
+        # db.session.add(bus)
+        bus.route_id=route_id
+        bus.departure_time=datetime.strptime(departure_time,'%Y-%m-%d %H:%M:%S')
+        bus.driver=driver
+        bus.capacity=capacity
         db.session.commit()
         return { 
             "id":bus.id,

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
-function LoginForm({ setIsLoggedIn }) {
+function LoginForm({ setIsLoggedIn, setUserRole }) {
   const navigate = useNavigate();
   const [errors, setErrors] = useState("");
   const formik = useFormik({
@@ -32,15 +32,18 @@ function LoginForm({ setIsLoggedIn }) {
       })
         .then(async (response) => {
           if (response.status === 200) {
-            const { token } = await response.json();
+            const { token, User_Role } = await response.json();
+            setUserRole(User_Role);
+            console.log(User_Role);
             localStorage.setItem("token", token);
             setIsLoggedIn(true);
             navigate("/");
           } else {
-            // Handle login errors
+           
             setErrors("Invalid Username or Password!");
           }
         })
+        // .then((data) => console.log(data))
         .catch((error) => {
           // Handle network or server errors
           setErrors("There Was an Issue logging in", error);

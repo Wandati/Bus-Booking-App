@@ -1,18 +1,15 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-function Navbar({ isLoggedIn, setIsLoggedIn }) {
-  // const filtered_routes = (e) => {
-  //   console.log(e);
-  // };
+function Navbar({ isLoggedIn, setIsLoggedIn, userRole }) {
+
   const navigate = useNavigate();
   const handleLogout = () => {
-    // Implement logout logic
+   
     localStorage.removeItem("token");
     setIsLoggedIn(false);
     navigate("/");
 
-    // Additional logic (e.g., clearing localStorage) can be added here
   };
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -48,43 +45,8 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
                 Contact Us
               </Link>
             </li>
-            {isLoggedIn ? (
+            {isLoggedIn && userRole === "Customer" && (
               <>
-                <li className="nav-item dropdown ">
-                  <a
-                    className="nav-link dropdown-toggle"
-                    href="#"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Dashboards
-                  </a>
-                  <ul className="dropdown-menu">
-                    <li>
-                      {" "}
-                      <Link to="/admin" className="dropdown-item">
-                        Admin dashboard
-                      </Link>
-                    </li>
-
-                    <li>
-                      <hr className="dropdown-divider" />
-                    </li>
-                    <li>
-                      {" "}
-                      <Link to="/admin" className="dropdown-item">
-                        Bus-Owner
-                      </Link>
-                    </li>
-                  </ul>
-                </li>
-                {/* <li className="nav-item">
-                  <Link to="/admin" className="nav-link active">
-                    Admin dashboard
-                  </Link>
-                </li> */}
-
                 <li className="nav-item">
                   <Link to="/bookings" className="nav-link active">
                     My Bookings
@@ -100,7 +62,45 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
                   </span>
                 </li>
               </>
-            ) : (
+            )}
+            {isLoggedIn && userRole === "BusOwner" && (
+              <>
+                <li className="nav-item">
+                  <Link to="/busOwner" className="nav-link active">
+                    Bus Owner Dashboard
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <span
+                    className="nav-link active"
+                    style={{ cursor: "pointer" }}
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </span>
+                </li>
+              </>
+            )}
+            {isLoggedIn && userRole === "Admin" && (
+              <>
+                <li className="nav-item">
+                  <Link to="/admin" className="nav-link active">
+                    Admin Dashboard
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <span
+                    className="nav-link active"
+                    style={{ cursor: "pointer" }}
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </span>
+                </li>
+              </>
+            )}
+
+            {!isLoggedIn && (
               <>
                 <li className="nav-item">
                   <Link to="/signup" className="nav-link active">
@@ -114,33 +114,12 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
                 </li>
               </>
             )}
-            {/* <li className="nav-item">
-              <Link to="/signup" className="nav-link active">
-                Sign-Up
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/login" className="nav-link active">
-                Login
-              </Link>
-            </li> */}
-          </ul>
-          {/* <form className="d-flex" role="search">
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search For Routes Here..."
-              aria-label="Search"
-              onChange={(e) => filtered_routes(e.target.value)}
-            />
-            <button className="btn btn-outline-secondary" type="submit">
-              Search
-            </button>
-          </form> */}
+            </ul>
         </div>
       </div>
     </nav>
   );
-}
+};
+
 
 export default Navbar;

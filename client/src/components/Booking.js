@@ -34,29 +34,7 @@ function Booking() {
       alert("Your booking is safe");
     }
   };
-  // const handleUpdate = (id) => {
-  //   fetch(`http://127.0.0.1:5500/bookings/${id}`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //     body: JSON.stringify({ seat_number: updatedSeatNumber }),
-  //   })
-  //     .then((res) => {
-  //       if (res.status === 200) {
-  //         alert("Seat Number Updated Successfully...");
-  //         // Reload the page to display the updated bookings after the seat number update
-  //         window.location.reload();
-  //       } else {
-  //         throw new Error("Failed to update seat number");
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       setError(err);
-  //       console.error(error);
-  //     });
-  // };
+
   const toggleUpdateForm = (bookingId) => {
     setUpdateForms((prevForms) => ({
       ...prevForms,
