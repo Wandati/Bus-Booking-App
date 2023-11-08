@@ -455,12 +455,12 @@ class RoutesById(Resource):
         user_id=get_jwt_identity()
         user=User.query.filter_by(id=user_id).first()
         if not(user.user_type == "Admin"):
-            return {"error":"Unauthorized"},400
+            return {"error":"Unauthorized"},401
         elif user_id in blacklisted_tokens:
-            return {"Error":"Unauthorized!!"},400
+            return {"Error":"Unauthorized!!"},403
         route=Route.query.filter_by(id=id).first()
         if not route:
-            return {"Error":"Route Not found!!!"}
+            return {"Error":"Route Not found!!!"},404
         try:
             data=request.get_json()
             # departure_time=data["departure_time"]
@@ -487,7 +487,7 @@ class RoutesById(Resource):
                 # "return_time":route.return_time.strftime('%Y-%m-%d %H:%M:%S') if route.return_time else None,
             },200
         except Exception as e:
-            return {"Error":str(e)},400
+            return {"Error":str(e)},401
     @jwt_required()
     def delete(self,id):
         user_id=get_jwt_identity()

@@ -74,9 +74,10 @@ import SignUpForm from "./components/Signup";
 import BookingById from "./components/BookingById";
 import Booking from "./components/Booking";
 import Payment from "./components/Payment";
-import ADasboard from "./ADasboard";
+import ADasboard from "./components/ADasboard";
 import Users from "./components/Users";
 import UsersById from "./components/UsersById";
+import AdRoutes from "./components/AdRoutes";
 import "./App.css";
 
 function App() {
@@ -109,6 +110,7 @@ function App() {
             <Route path="/users/:id" element={<UsersById />} />
             <Route path="/buses" element={<Bus />} />
             <Route path="/routes/:id" element={<PlaceById />} />
+            <Route path="/ad_routes" element={<AdRoutes />} />
             <Route
               path="/payments/:id"
               element={<Payment userRole={userRole} />}
