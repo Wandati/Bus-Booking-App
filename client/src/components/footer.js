@@ -28,7 +28,7 @@ function Footer() {
           </p>
         </div>
         <div className="company-info">
-          <p>About: Our company is dedicated to providing high-quality services.</p>
+          <p>BusTrack is dedicated to providing high-quality services.</p>
           <p>Location: 123 Main Street, City, Country</p>
           <p>Telephone: +1 (123) 456-7890</p>
           <p>Email: info@bustrack.com</p>
