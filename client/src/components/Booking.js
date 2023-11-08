@@ -104,13 +104,20 @@ function Booking() {
         .then((response) => {
           if (response.ok) {
             return response.json();
+          } else if (response.status === 403) {
+            navigate("/");
           } else {
-            throw new Error(response.statusText);
+            console.error("Something Went Wrong");
           }
         })
         .then((data) => {
-          setBookings(data.bookings);
-          console.log(data);
+          if (data && data.bookings) {
+            setBookings(data.bookings);
+            console.log(data.bookings);
+          }else{
+            console.log('No Data Found');
+          }
+          
         })
         .catch((error) => {
           setError(error.message);

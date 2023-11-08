@@ -525,7 +525,9 @@ class BookingList(Resource):
     def get(self):
         user_id = get_jwt_identity()
         current_user = User.query.filter_by(id=user_id).first()
-        if not current_user.bookings:
+        if not (current_user.user_type == "Customer"):
+            return {"Error":"Only Customers Can Access this Page"},403
+        elif not current_user.bookings:
             return {"Message": "No Bookings Available.."}, 404
         elif user_id in blacklisted_tokens:
             return {"Error": "Unauthorized!!"}, 400
@@ -557,11 +559,13 @@ class BookingList(Resource):
         bus_id=data['bus_id']
         seat_number=data['seat_number']
         # is_confirmed=data['is_confirmed']
-        
+        current_user = User.query.filter_by(id=user_id).first()
         bus=Bus.query.filter_by(id=bus_id).first()
         # existing_booking = Booking.query.filter_by(user_id=user_id,bus_id=bus_id).first()
         existing_seat=Booking.query.filter_by(bus_id=bus_id,seat_number=seat_number).first()
-        if not bus:
+        if not (current_user.user_type == "Customer"):
+            return {"Error":"Only Customers Can Access this Page"},403
+        elif not bus:
             return {"Error":"Bus Does not exist"},404
         elif existing_seat:
             return {"Error":"Seat Has Already Been Booked..."},401
@@ -615,7 +619,9 @@ class BookingById(Resource):
         user_id=get_jwt_identity()
         user=User.query.filter_by(id=user_id).first()
         booking=Booking.query.filter_by(id=id).first()
-        if not booking:
+        if not (user.user_type == "Customer"):
+            return {"Error":"Only Customers Can Access this Page"},403
+        elif not booking:
             return {"error":"Booking does not exist"},401
         elif user_id in blacklisted_tokens:
             return {"Error":"Unauthorized!!"},400
@@ -637,7 +643,9 @@ class BookingById(Resource):
         user_id=get_jwt_identity()
         user=User.query.filter_by(id=user_id).first()
         booking=Booking.query.filter_by(id=id).first()
-        if not booking:
+        if not (user.user_type == "Customer"):
+            return {"Error":"Only Customers Can Access this Page"},403
+        elif not booking:
             return {"error":"Booking does not exist"},401
         elif user_id in blacklisted_tokens:
             return {"Error":"Unauthorized!!"},400
@@ -677,7 +685,9 @@ class BookingById(Resource):
         user_id=get_jwt_identity()
         user=User.query.filter_by(id=user_id).first()
         booking=Booking.query.filter_by(id=id).first()
-        if not booking:
+        if not (user.user_type == "Customer"):
+            return {"Error":"Only Customers Can Access this Page"},403
+        elif not booking:
             return {"error":"Booking does not exist"},401
         elif user_id in  blacklisted_tokens:
             return {"Error":"Unauthorized!!"},400

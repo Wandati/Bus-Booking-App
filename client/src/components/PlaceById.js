@@ -65,7 +65,10 @@ function PlaceById() {
         // alert("Seating Has Already been booked...");
         // } else if (responseJson.error === "Seat Has Already Been Booked...") {
         //   alert("Seat has already been booked. Please choose another one.");
-      } else {
+      } else if (response.status === 403){
+        setErrors("Only Customers Should Make A Booking...")
+        
+      }else{
         console.log("There was a problem with your booking.,");
       }
     } catch (error) {
