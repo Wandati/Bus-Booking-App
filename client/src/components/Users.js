@@ -246,7 +246,7 @@ function Users() {
                 )}
                 <button
                   onClick={() => handleDelete(user.id)}
-                  className="btn btn-danger mt-2"
+                  className="btn btn-outline-danger mt-2"
                 >
                   Delete User
                 </button>
