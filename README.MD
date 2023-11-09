@@ -18,7 +18,7 @@ This repository contains all the code necessary to run a bus booking website. Wi
 ## Project Set Up Instructions
 
   1. Git clone the repository
-  2. Open it in vscode
+  2. Open it in your editor of choice
   3. Create a virtual environment (optional but recommended)
   4. Install the dependencies
   5. Run the app
