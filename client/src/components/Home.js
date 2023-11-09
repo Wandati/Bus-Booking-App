@@ -16,7 +16,6 @@ function Home() {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        // Assuming data is an array of objects with start_point and end_point properties
         setPickupLocations(data);
         setDestinations(data);
       })

@@ -199,13 +199,14 @@ class Buses(Resource):
             {
                 "id":bus.id,
                 # "Name":bus.name,
-                "Number Plate":bus.number_plate,
+                "Number_Plate":bus.number_plate,
                 "From":Route.query.filter_by(id=bus.route_id).first().start_point,
                 "To":Route.query.filter_by(id=bus.route_id).first().end_point,
                 "Departure_Time":bus.departure_time.strftime('%Y-%m-%d %H:%M:%S '),
                 # "Owner":User.query.filter_by(id=bus.owner_id).first().username,
                 "no_of_seats":bus.capacity,
                 "available_seats":bus.available_seats,
+                "seats_booked":bus.capacity - bus.available_seats,
                 "driver":bus.driver
             }
             for bus in user.buses
@@ -222,19 +223,23 @@ class Buses(Resource):
         data=request.get_json()
         # name=data['name']
         number_plate=data['number_plate']
-        route_id=data['route_id']
+        # route_id=data['route_id']
+        start_point=data["From"].capitalize()
+        end_point=data["To"].capitalize()
         seats_num=data['no_of_seats']
         driver=data['driver']
         departure_time=data['departure_time']
-        route=Route.query.filter_by(id=route_id).first()
+        route=Route.query.filter_by(start_point=start_point,end_point=end_point).first()
         existing_bus=Bus.query.filter_by(number_plate=number_plate).first()
+        if not request.is_json:
+            return {"Error":"Invalid Json"},401
         if not route:
-            return{"Error":"Route does not exist!!"}
+            return{"Error":"Route does not exist!!"},404
         elif existing_bus:
-            return{"Error":f"Bus With Plate_No {number_plate} already exists!!"},401
+            return{"Error":f"Bus With Plate_No {number_plate} already exists!!"},403
         try:
             new_departure_time=datetime.strptime(departure_time,'%Y-%m-%d %H:%M:%S')
-            new_bus=Bus(number_plate=number_plate,owner_id=user_id,departure_time=new_departure_time,route_id=route_id,capacity=seats_num,driver=driver)
+            new_bus=Bus(number_plate=number_plate,owner_id=user_id,departure_time=new_departure_time,route_id=route.id,capacity=seats_num,driver=driver)
             db.session.add(new_bus)
             db.session.commit()
             return{
@@ -287,14 +292,19 @@ class BusesById(Resource):
         elif bus not in user.buses:
             return {"Error":"Unauthorization error!!"},401
         data=request.get_json()
-        route_id=data['route_id']
-        departure_time=data['departure_time']
+        # route_id=data['route_id']
+        From=data["from"]
+        To=data['to']
+        departure_time=data['departure_time'].strip()
         driver=data['driver']
         capacity=data['capacity']
+        route=Route.query.filter_by(start_point=From,end_point=To).first()
+        if not route:
+            return {"Error":"Route Not Found"},404
         # for attr in request.get_json():
         #     setattr(bus,attr,request.json[attr])
         # db.session.add(bus)
-        bus.route_id=route_id
+        bus.route_id=route.id
         bus.departure_time=datetime.strptime(departure_time,'%Y-%m-%d %H:%M:%S')
         bus.driver=driver
         bus.capacity=capacity

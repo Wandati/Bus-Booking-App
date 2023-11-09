@@ -78,6 +78,7 @@ import ADasboard from "./components/ADasboard";
 import Users from "./components/Users";
 import UsersById from "./components/UsersById";
 import AdRoutes from "./components/AdRoutes";
+import BDashboard from "./components/BDashboard";
 import "./App.css";
 
 function App() {
@@ -111,6 +112,7 @@ function App() {
             <Route path="/buses" element={<Bus />} />
             <Route path="/routes/:id" element={<PlaceById />} />
             <Route path="/ad_routes" element={<AdRoutes />} />
+            <Route path="/busOwner" element={<BDashboard />} />
             <Route
               path="/payments/:id"
               element={<Payment userRole={userRole} />}
