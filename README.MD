@@ -22,9 +22,9 @@ This repository contains all the code necessary to run a bus booking website. Wi
   3. Run the following commands:
 
 ## Programming Languages Used
-  1. JavaScript🤖
+  1. JavaScript(React)🤖
   2. Python🤖
-  3. CSS🤖
+  3. CSS(Bootstrap)🤖
 
 ## Copyright ©
 
