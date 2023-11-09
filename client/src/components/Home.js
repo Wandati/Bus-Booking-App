@@ -15,7 +15,7 @@ function Home({ setUserRole }) {
   const navigate = useNavigate();
   useEffect(() => {
     if (token) {
-      fetch("http://127.0.0.1:5500/check_user", {
+      fetch("https://bus-tracker.onrender.com/check_user", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -33,7 +33,7 @@ function Home({ setUserRole }) {
   }, [token, setUserRole]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5500/routes")
+    fetch("https://bus-tracker.onrender.com/routes")
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -71,7 +71,7 @@ function Home({ setUserRole }) {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:5500/routes/?start=${start}&stop=${stop}`
+        `https://bus-tracker.onrender.com/routes/?start=${start}&stop=${stop}`
       );
       if (response.ok) {
         const data = await response.json();
