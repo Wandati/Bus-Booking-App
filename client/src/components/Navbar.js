@@ -1,11 +1,17 @@
-import React from 'react';
-import { Link } from 'react-router-dom'; 
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-function Navbar() {
+function Navbar({ isLoggedIn, setIsLoggedIn, userRole }) {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    navigate("/");
+  };
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
-        <Link to="/" className="navbar-brand"> 
+        <Link to="/" className="navbar-brand">
           BusTrack
         </Link>
         <button
@@ -22,17 +28,12 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link to="/" className="nav-link active"> 
-                Home
-              </Link>
-              </li>
-              <li className="nav-item">
-              <Link to="/admin" className="nav-link active"> 
-                Admin
+              <Link to="/routes" className="nav-link active">
+                Routes
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/about" className="nav-link active"> 
+              <Link to="/about" className="nav-link active">
                 About Us
               </Link>
             </li>
@@ -41,28 +42,76 @@ function Navbar() {
                 Contact
               </Link>
             </li>
-            <li className="nav-item">
-              <Link to="/signup" className="nav-link active">
-                Sign-Up
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/login" className="nav-link active"> 
-                Login
-              </Link>
-            </li>
+            {isLoggedIn && userRole === "Customer" && (
+              <>
+                <li className="nav-item">
+                  <Link to="/bookings" className="nav-link active">
+                    My Bookings
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <span
+                    className="nav-link active"
+                    style={{ cursor: "pointer" }}
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </span>
+                </li>
+              </>
+            )}
+            {isLoggedIn && userRole === "BusOwner" && (
+              <>
+                <li className="nav-item">
+                  <Link to="/busOwner" className="nav-link active">
+                    Bus Owner Dashboard
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <span
+                    className="nav-link active"
+                    style={{ cursor: "pointer" }}
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </span>
+                </li>
+              </>
+            )}
+            {isLoggedIn && userRole === "Admin" && (
+              <>
+                <li className="nav-item">
+                  <Link to="/admin" className="nav-link active">
+                    Admin Dashboard
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <span
+                    className="nav-link active"
+                    style={{ cursor: "pointer" }}
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </span>
+                </li>
+              </>
+            )}
+
+            {!isLoggedIn && (
+              <>
+                <li className="nav-item">
+                  <Link to="/signup" className="nav-link active">
+                    Sign-Up
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/login" className="nav-link active">
+                    Login
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
-          <form className="d-flex" role="search">
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search For Routes Here..."
-              aria-label="Search"
-            />
-            <button className="btn btn-outline-secondary" type="submit">
-              Search
-            </button>
-          </form>
         </div>
       </div>
     </nav>

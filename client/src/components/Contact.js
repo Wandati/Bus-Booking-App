@@ -1,32 +1,54 @@
-import React from 'react';
+import React from "react";
+import { useEffect } from "react";
+function ContactUs({setUserRole}) {
+  const token=localStorage.getItem("token")
+  useEffect(() => {
+    if (token) {
+      fetch("http://127.0.0.1:5500/check_user", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setUserRole(data["User_Role"]);
+          // console.log(data);
+        });
+    } else {
+      // console.log("Hello World");
+    }
+  }, [token,setUserRole]);
+  return (
+    <div className="text-center mb-5 mt-2">
+      <h1 className="mb-5">Contact Us</h1>
+      <p>
+        If you have any questions or feedback, please feel free to contact us:
+      </p>
 
-const Contact = () => {
-    return (
-        <div className="container">
-            <h1>Contact Us</h1>
+      <div>
+        <strong>Email:</strong>{" "}
+        <a
+          className="text-decoration-none text-dark"
+          href="kenyanhuan@gmail.com"
+        >
+          huan@gmailcom
+        </a>
+      </div>
 
-            <p className="lead"> Do you have any questions or feedback? Don't hesitate to get in touch with us!</p>
+      <div>
+        <strong>Phone:</strong>{" "}
+        <a className="text-decoration-none text-dark" href="tel:+2547897653">
+          +2547-456-789
+        </a>
+      </div>
 
-            <form>
-                <div className="mb-3">
-                    <label htmlFor="name" className="form-label">Name</label>
-                    <input type="text" className="form-control" id="name" />
-                </div>
+      <div>
+        <strong>Address:</strong> 111 Main Street, City, Country
+      </div>
+    </div>
+  );
+}
 
-                <div className="mb-3">
-                    <label htmlFor="email" className="form-label">Email</label>
-                    <input type="email" className="form-control" id="email" />
-                </div>
-
-                <div className="mb-3">
-                    <label htmlFor="message" className="form-label">Message</label>
-                    <textarea className="form-control" id="message" rows="4"></textarea>
-                </div>
-
-                <button type ="submit" className="btn btn-primary">Submit</button>
-            </form>
-        </div>
-    );
-};
-
-export default Contact;
+export default ContactUs;

@@ -1,62 +1,53 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-function Booking() {
+function Booking({ setUserRole }) {
   const [bookings, setBookings] = useState([]);
   const [error, setError] = useState(null);
   const [updateForms, setUpdateForms] = useState({});
   const [newSeatNumber, setNewSeatNumber] = useState("");
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const handleDelete = (id) => {
-    const res = prompt("Are You Sure You Want To cancel your booking?");
-    if (res.toLowerCase() === "yes") {
-      fetch(`http://127.0.0.1:5500/bookings/${id}`, {
-        method: "DELETE",
+  useEffect(() => {
+    if (token) {
+      fetch("http://127.0.0.1:5500/check_user", {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       })
-        .then((res) => {
-          if (res.status === 200) {
-            alert("Booking Has Been deleted Successfully...");
-            window.location.reload();
-          } else {
-            throw new Error("Failed to delete booking");
-          }
-        })
-        .catch((err) => {
-          setError(err);
-          console.log(error);
+        .then((res) => res.json())
+        .then((data) => {
+          setUserRole(data["User_Role"]);
+          // console.log(data);
         });
     } else {
-      alert("Your booking is safe");
+      // console.log("Hello World");
     }
+  }, [token, setUserRole]);
+  const handleDelete = (id) => {
+    fetch(`http://127.0.0.1:5500/bookings/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          alert("Booking Has Been deleted Successfully...");
+          window.location.reload();
+        } else {
+          throw new Error("Failed to delete booking");
+        }
+      })
+      .catch((err) => {
+        setError(err);
+        console.log(error);
+      });
   };
-  // const handleUpdate = (id) => {
-  //   fetch(`http://127.0.0.1:5500/bookings/${id}`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //     body: JSON.stringify({ seat_number: updatedSeatNumber }),
-  //   })
-  //     .then((res) => {
-  //       if (res.status === 200) {
-  //         alert("Seat Number Updated Successfully...");
-  //         // Reload the page to display the updated bookings after the seat number update
-  //         window.location.reload();
-  //       } else {
-  //         throw new Error("Failed to update seat number");
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       setError(err);
-  //       console.error(error);
-  //     });
-  // };
+
   const toggleUpdateForm = (bookingId) => {
     setUpdateForms((prevForms) => ({
       ...prevForms,
@@ -113,11 +104,10 @@ function Booking() {
         .then((data) => {
           if (data && data.bookings) {
             setBookings(data.bookings);
-            console.log(data.bookings);
-          }else{
-            console.log('No Data Found');
+            // console.log(data.bookings);
+          } else {
+            console.log("No Data Found");
           }
-          
         })
         .catch((error) => {
           setError(error.message);
@@ -133,7 +123,7 @@ function Booking() {
   if (bookings.length === 0) {
     return (
       <>
-        <h1 className="text-center">No bookings Found...</h1>
+        <h1 className="text-center mt-4">No bookings Found...</h1>
         <p className="text-center">
           Make A Booking{" "}
           <Link className="text-decoration-none text-dark" to="/routes">

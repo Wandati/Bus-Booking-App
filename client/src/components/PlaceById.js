@@ -1,12 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-function PlaceById() {
+function PlaceById({ setUserRole }) {
   const [routeDetails, setRouteDetails] = useState(null);
   const [selectedSeat, setSelectedSeat] = useState(null);
   const [errors, setErrors] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    if (token) {
+      fetch("http://127.0.0.1:5500/check_user", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setUserRole(data["User_Role"]);
+          // console.log(data);
+        });
+    } else {
+      // console.log("Hello World");
+    }
+  }, [token, setUserRole]);
 
   useEffect(() => {
     const fetchRouteDetails = async () => {
@@ -62,13 +81,15 @@ function PlaceById() {
         setErrors(
           "Seat Number Has Already Been Booked.Please Choose Another one..."
         );
+        setTimeout(() => {
+          setErrors("");
+        }, 2000);
         // alert("Seating Has Already been booked...");
         // } else if (responseJson.error === "Seat Has Already Been Booked...") {
         //   alert("Seat has already been booked. Please choose another one.");
-      } else if (response.status === 403){
-        setErrors("Only Customers Should Make A Booking...")
-        
-      }else{
+      } else if (response.status === 403) {
+        setErrors("Only Customers Should Make A Booking...");
+      } else {
         console.log("There was a problem with your booking.,");
       }
     } catch (error) {
