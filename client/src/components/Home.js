@@ -3,14 +3,34 @@ import React, { useState, useEffect } from "react";
 // import "./App.css";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-function Home() {
+function Home({ setUserRole }) {
   const [pickupLocation, setPickupLocation] = useState("");
   const [destination, setDestination] = useState("");
   const [pickupLocations, setPickupLocations] = useState([]);
   const [destinations, setDestinations] = useState([]);
   const [routeDetails, setRouteDetails] = useState([]);
+  const token = localStorage.getItem("token")
+  // const[role,setRole]=useState('')
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  useEffect(() => {
+    if (token) {
+      fetch("http://127.0.0.1:5500/check_user", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setUserRole(data["User_Role"]);
+          console.log(data);
+        });
+    } else {
+      console.log("Hello World");
+    }
+  }, [token,setUserRole]);
   useEffect(() => {
     fetch("http://127.0.0.1:5500/routes")
       .then((response) => response.json())

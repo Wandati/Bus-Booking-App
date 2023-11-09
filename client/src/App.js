@@ -69,7 +69,8 @@ import LoginForm from "./components/Login";
 // import Footer from "./components/Footer";
 import Place from "./components/Place";
 import PlaceById from "./components/PlaceById";
-import Bus from "./components/Bus";
+// import Bus from "./components/Bus";
+import NotFound from "./components/NotFound";
 import SignUpForm from "./components/Signup";
 import BookingById from "./components/BookingById";
 import Booking from "./components/Booking";
@@ -102,20 +103,53 @@ function App() {
             userRole={userRole}
           />
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/routes" element={<Place />} />
-            <Route path="/admin" element={<ADasboard />} />
-            <Route path="/users" element={<Users />} />
-            <Route path="/users/:id" element={<UsersById />} />
-            <Route path="/buses" element={<Bus />} />
-            <Route path="/routes/:id" element={<PlaceById />} />
-            <Route path="/ad_routes" element={<AdRoutes />} />
-            <Route path="/busOwner" element={<BDashboard />} />
+            <Route path="/" element={<Home setUserRole={setUserRole} />} />
+            <Route
+              path="/about"
+              element={<About setUserRole={setUserRole} />}
+            />
+             <Route
+              path="*"
+              element={<NotFound />}
+            />
+            <Route
+              path="/contact"
+              element={<Contact setUserRole={setUserRole} />}
+            />
+            <Route
+              path="/routes"
+              element={<Place setUserRole={setUserRole} />}
+            />
+            <Route
+              path="/admin"
+              element={<ADasboard setUserRole={setUserRole} userRole={userRole}/>}
+            />
+            <Route
+              path="/users"
+              element={<Users setUserRole={setUserRole} />}
+            />
+            <Route
+              path="/users/:id"
+              element={<UsersById setUserRole={setUserRole} />}
+            />
+            {/* <Route path="/buses" element={<Bus setUserRole={setUserRole} />} /> */}
+            <Route
+              path="/routes/:id"
+              element={<PlaceById setUserRole={setUserRole} />}
+            />
+            <Route
+              path="/ad_routes"
+              element={<AdRoutes setUserRole={setUserRole} />}
+            />
+            <Route
+              path="/busOwner"
+              element={<BDashboard setUserRole={setUserRole} />}
+            />
             <Route
               path="/payments/:id"
-              element={<Payment userRole={userRole} />}
+              element={
+                <Payment userRole={userRole} setUserRole={setUserRole} />
+              }
             />
             <Route
               path="/login"
@@ -126,8 +160,14 @@ function App() {
                 />
               }
             />
-            <Route path="/bookings/" element={<Booking />} />
-            <Route path="/bookings/:id" element={<BookingById />} />
+            <Route
+              path="/bookings/"
+              element={<Booking setUserRole={setUserRole} />}
+            />
+            <Route
+              path="/bookings/:id"
+              element={<BookingById setUserRole={setUserRole} />}
+            />
             <Route path="/signup" element={<SignUpForm />} />
           </Routes>
         </div>

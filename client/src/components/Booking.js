@@ -1,38 +1,51 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-function Booking() {
+function Booking({ setUserRole }) {
   const [bookings, setBookings] = useState([]);
   const [error, setError] = useState(null);
   const [updateForms, setUpdateForms] = useState({});
   const [newSeatNumber, setNewSeatNumber] = useState("");
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const handleDelete = (id) => {
-    const res = prompt("Are You Sure You Want To cancel your booking?");
-    if (res.toLowerCase() === "yes") {
-      fetch(`http://127.0.0.1:5500/bookings/${id}`, {
-        method: "DELETE",
+  useEffect(() => {
+    if (token) {
+      fetch("http://127.0.0.1:5500/check_user", {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       })
-        .then((res) => {
-          if (res.status === 200) {
-            alert("Booking Has Been deleted Successfully...");
-            window.location.reload();
-          } else {
-            throw new Error("Failed to delete booking");
-          }
-        })
-        .catch((err) => {
-          setError(err);
-          console.log(error);
+        .then((res) => res.json())
+        .then((data) => {
+          setUserRole(data["User_Role"]);
+          console.log(data);
         });
     } else {
-      alert("Your booking is safe");
+      console.log("Hello World");
     }
+  }, [token,setUserRole]);
+  const handleDelete = (id) => {
+    fetch(`http://127.0.0.1:5500/bookings/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          alert("Booking Has Been deleted Successfully...");
+          window.location.reload();
+        } else {
+          throw new Error("Failed to delete booking");
+        }
+      })
+      .catch((err) => {
+        setError(err);
+        console.log(error);
+      });
   };
 
   const toggleUpdateForm = (bookingId) => {
@@ -92,10 +105,9 @@ function Booking() {
           if (data && data.bookings) {
             setBookings(data.bookings);
             console.log(data.bookings);
-          }else{
-            console.log('No Data Found');
+          } else {
+            console.log("No Data Found");
           }
-          
         })
         .catch((error) => {
           setError(error.message);

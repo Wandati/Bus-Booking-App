@@ -52,6 +52,14 @@ class Login(Resource):
             return {"Message":"Login Successful!!","token":token,"User_Role":user.user_type},200
         else:
             return {"Error":"Invalid Email or Password!!"},401
+class CheckUser(Resource):
+    @jwt_required()
+    def get(self):
+        user_id=get_jwt_identity()
+        current_user=User.query.filter_by(id=user_id).first()
+        return {
+            "User_Role":current_user.user_type
+        }
         
 class Logout(Resource):
     @jwt_required()
@@ -741,6 +749,7 @@ api.add_resource(BookingList,'/bookings',endpoint='/bookings')
 api.add_resource(BookingById,'/bookings/<int:id>',endpoint='/bookings/<int:id>')
 api.add_resource(FilteredRoutes,'/routes/',endpoint='/routes/')
 api.add_resource(ConfirmBooking,'/confirm_booking',endpoint='/confirm_booking')
+api.add_resource(CheckUser,'/check_user',endpoint='/check_user')
     
 
 if __name__ == "__main__":

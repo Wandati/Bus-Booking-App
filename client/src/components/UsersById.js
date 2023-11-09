@@ -2,12 +2,30 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-function UsersById() {
+function UsersById({setUserRole}) {
   const { id } = useParams();
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const [info, setInfo] = useState([]);
   const [errors, setErrors] = useState(null);
+  useEffect(() => {
+    if (token) {
+      fetch("http://127.0.0.1:5500/check_user", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setUserRole(data["User_Role"]);
+          console.log(data);
+        });
+    } else {
+      console.log("Hello World");
+    }
+  }, [token,setUserRole]);
 
   useEffect(() => {
     if (token) {

@@ -2,20 +2,17 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function Navbar({ isLoggedIn, setIsLoggedIn, userRole }) {
-
   const navigate = useNavigate();
   const handleLogout = () => {
-   
     localStorage.removeItem("token");
     setIsLoggedIn(false);
     navigate("/");
-
   };
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
         <Link to="/" className="navbar-brand">
-          Bus Booking App
+          Bus Track
         </Link>
         <button
           className="navbar-toggler"
@@ -114,12 +111,11 @@ function Navbar({ isLoggedIn, setIsLoggedIn, userRole }) {
                 </li>
               </>
             )}
-            </ul>
+          </ul>
         </div>
       </div>
     </nav>
   );
-};
-
+}
 
 export default Navbar;

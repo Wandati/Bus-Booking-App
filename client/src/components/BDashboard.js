@@ -1,8 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function BDashboard() {
+function BDashboard({ setUserRole }) {
   const token = localStorage.getItem("token");
+  useEffect(() => {
+    if (token) {
+      fetch("http://127.0.0.1:5500/check_user", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setUserRole(data["User_Role"]);
+          console.log(data);
+        });
+    } else {
+      console.log("Hello World");
+    }
+  }, [token, setUserRole]);
+
   const [buses, setBuses] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [errors, setErrors] = useState("");
@@ -28,6 +47,8 @@ function BDashboard() {
         .then((res) => {
           if (res.ok) {
             return res.json();
+          } else if (res.status === 401) {
+            navigate("/");
           }
           throw new Error("Network response was not ok.");
         })
@@ -86,10 +107,10 @@ function BDashboard() {
           console.log("Updated Bus:", updatedBus);
           alert("Bus Successfully updated!");
           window.location.reload();
-        } else if (response.status === 404){
+        } else if (response.status === 404) {
           setErrors("Route Not Found");
-        }else{
-          console.error("Failed to Update Route")
+        } else {
+          console.error("Failed to Update Route");
         }
       } catch (error) {
         setErrors(
@@ -255,7 +276,7 @@ function BDashboard() {
                 required
               />
             </div>
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-dark">
               Add Bus
             </button>
           </form>
@@ -330,7 +351,7 @@ function BDashboard() {
                 required
               />
             </div>
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-dark">
               Update Bus
             </button>
           </form>

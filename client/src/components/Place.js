@@ -1,9 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-function Place() {
+function Place({setUserRole}) {
   const [routes, setRoutes] = useState([]);
   const [query, setQuery] = useState("");
+  const token=localStorage.getItem("token")
+  useEffect(() => {
+    if (token) {
+      fetch("http://127.0.0.1:5500/check_user", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setUserRole(data["User_Role"]);
+          console.log(data);
+        });
+    } else {
+      console.log("Hello World");
+    }
+  }, [token,setUserRole]);
 
   useEffect(() => {
     fetch("http://127.0.0.1:5500/routes")
