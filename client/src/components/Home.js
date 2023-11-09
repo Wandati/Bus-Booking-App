@@ -87,6 +87,9 @@ function Home({ setUserRole }) {
         console.error("Failed to fetch route details");
         // alert("Route Does not exist...");
         setError("Route Does Not Exist..");
+        setTimeout(() => {
+          setError("");
+        }, 2000);
       }
     } catch (error) {
       console.error("Error fetching data:", error);

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-function PlaceById({setUserRole}) {
+function PlaceById({ setUserRole }) {
   const [routeDetails, setRouteDetails] = useState(null);
   const [selectedSeat, setSelectedSeat] = useState(null);
   const [errors, setErrors] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const token=localStorage.getItem("token")
+  const token = localStorage.getItem("token");
   useEffect(() => {
     if (token) {
       fetch("http://127.0.0.1:5500/check_user", {
@@ -25,7 +25,7 @@ function PlaceById({setUserRole}) {
     } else {
       // console.log("Hello World");
     }
-  }, [token,setUserRole]);
+  }, [token, setUserRole]);
 
   useEffect(() => {
     const fetchRouteDetails = async () => {
@@ -81,6 +81,9 @@ function PlaceById({setUserRole}) {
         setErrors(
           "Seat Number Has Already Been Booked.Please Choose Another one..."
         );
+        setTimeout(() => {
+          setErrors("");
+        }, 2000);
         // alert("Seating Has Already been booked...");
         // } else if (responseJson.error === "Seat Has Already Been Booked...") {
         //   alert("Seat has already been booked. Please choose another one.");

@@ -146,6 +146,9 @@ function BDashboard({ setUserRole }) {
         window.location.reload();
       } else if (response.status === 404) {
         setErrors("Failed.Route does not exist!");
+        setTimeout(() => {
+          setErrors("");
+        }, 2000);
       } else {
         console.error("Failed To Add Bus");
       }
