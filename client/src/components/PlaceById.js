@@ -10,7 +10,7 @@ function PlaceById({ setUserRole }) {
   const token = localStorage.getItem("token");
   useEffect(() => {
     if (token) {
-      fetch("http://127.0.0.1:5500/check_user", {
+      fetch("https://bus-tracker.onrender.com/check_user", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -30,7 +30,7 @@ function PlaceById({ setUserRole }) {
   useEffect(() => {
     const fetchRouteDetails = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:5500/routes/${id}`);
+        const response = await fetch(`https://bus-tracker.onrender.com/routes/${id}`);
         if (response.ok) {
           const data = await response.json();
           setRouteDetails(data);
@@ -61,7 +61,7 @@ function PlaceById({ setUserRole }) {
         return;
       }
 
-      const response = await fetch("http://127.0.0.1:5500/bookings", {
+      const response = await fetch("https://bus-tracker.onrender.com/bookings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
