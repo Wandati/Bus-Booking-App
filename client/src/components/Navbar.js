@@ -1,10 +1,19 @@
-export default function Navbar() {
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+function Navbar({ isLoggedIn, setIsLoggedIn, userRole }) {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    navigate("/");
+  };
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
-        <a className="navbar-brand" href="#">
-          Bus Booking App
-        </a>
+        <Link to="/" className="navbar-brand">
+          Bus Track
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -19,49 +28,94 @@ export default function Navbar() {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">
-                Home
-              </a>
+              <Link to="/routes" className="nav-link active">
+                Routes
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">
+              <Link to="/about" className="nav-link active">
                 About Us
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">
+              <Link to="/contact" className="nav-link active">
                 Contact Us
-              </a>
+              </Link>
             </li>
-            <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">
-                Sign-Up
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">
-                Login
-              </a>
-            </li>
-            {/* <li className="nav-item">
-              <a className="nav-link" href="#">
-                Link
-              </a>
-            </li> */}
+            {isLoggedIn && userRole === "Customer" && (
+              <>
+                <li className="nav-item">
+                  <Link to="/bookings" className="nav-link active">
+                    My Bookings
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <span
+                    className="nav-link active"
+                    style={{ cursor: "pointer" }}
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </span>
+                </li>
+              </>
+            )}
+            {isLoggedIn && userRole === "BusOwner" && (
+              <>
+                <li className="nav-item">
+                  <Link to="/busOwner" className="nav-link active">
+                    Bus Owner Dashboard
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <span
+                    className="nav-link active"
+                    style={{ cursor: "pointer" }}
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </span>
+                </li>
+              </>
+            )}
+            {isLoggedIn && userRole === "Admin" && (
+              <>
+                <li className="nav-item">
+                  <Link to="/admin" className="nav-link active">
+                    Admin Dashboard
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <span
+                    className="nav-link active"
+                    style={{ cursor: "pointer" }}
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </span>
+                </li>
+              </>
+            )}
+
+            {!isLoggedIn && (
+              <>
+                <li className="nav-item">
+                  <Link to="/signup" className="nav-link active">
+                    Sign-Up
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/login" className="nav-link active">
+                    Login
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
-          <form className="d-flex" role="search">
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search For Routes Here..."
-              aria-label="Search"
-            />
-            <button className="btn btn-outline-secondary" type="submit">
-              Search
-            </button>
-          </form>
         </div>
       </div>
     </nav>
   );
 }
+
+export default Navbar;

@@ -4,6 +4,7 @@ from flask_jwt_extended import JWTManager
 from models.dbconfig import db
 from flask_restful import Api
 
+
 app=Flask(__name__)
 app.config["SECRET_KEY"]="5b86bc3b8eb3b59930d5341c"
 app.config["SQLALCHEMY_DATABASE_URI"]="sqlite:///booking.db"
