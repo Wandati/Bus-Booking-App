@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-function UsersById({setUserRole}) {
+function UsersById({ setUserRole, userRole }) {
   const { id } = useParams();
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -25,7 +25,12 @@ function UsersById({setUserRole}) {
     } else {
       console.log("Hello World");
     }
-  }, [token,setUserRole]);
+  }, [token, setUserRole]);
+  useEffect(() => {
+    if (!token || userRole !== "Admin") {
+      navigate("/");
+    }
+  }, [token, navigate, userRole]);
 
   useEffect(() => {
     if (token) {

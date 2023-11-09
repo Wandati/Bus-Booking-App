@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from "react";
-
-function AdRoutes({setUserRole}) {
-
+import { useNavigate } from "react-router-dom";
+function AdRoutes({ setUserRole,userRole }) {
+  const navigate=useNavigate()
   const token = localStorage.getItem("token");
   useEffect(() => {
     if (token) {
@@ -21,7 +20,12 @@ function AdRoutes({setUserRole}) {
     } else {
       console.log("Hello World");
     }
-  }, [token,setUserRole]);
+  }, [token, setUserRole]);
+  useEffect(() => {
+    if (!token || userRole !== "Admin") {
+      navigate("/");
+    }
+  }, [token, navigate, userRole]);
   const [routes, setRoutes] = useState([]);
   const [errors, setErrors] = useState("");
   const [updateFormData, setUpdateFormData] = useState({
@@ -76,7 +80,6 @@ function AdRoutes({setUserRole}) {
       );
 
       if (response.ok) {
-       
         fetchRoutes();
         setUpdateFormVisibility(false);
         setUpdateFormData({
@@ -86,11 +89,9 @@ function AdRoutes({setUserRole}) {
           price: "",
         });
       } else {
-     
         setErrors("Failed to save route. Please try again.");
       }
     } catch (error) {
-      
       setErrors(error.message || "An error occurred. Please try again later.");
     }
   };
@@ -110,7 +111,6 @@ function AdRoutes({setUserRole}) {
           alert("Route Successfully deleted...");
           fetchRoutes();
         } else {
-     
           console.error("Failed to delete route");
         }
       } catch (error) {
@@ -128,11 +128,9 @@ function AdRoutes({setUserRole}) {
         const data = await response.json();
         setRoutes(data);
       } else {
-        
         console.error("Failed to fetch routes");
       }
     } catch (error) {
-     
       console.error("Failed to fetch routes:", error);
     }
   };

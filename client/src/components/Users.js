@@ -128,7 +128,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
-function Users({setUserRole}) {
+function Users({ setUserRole,userRole }) {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
@@ -151,7 +151,12 @@ function Users({setUserRole}) {
     } else {
       console.log("Hello World");
     }
-  }, [token,setUserRole]);
+  }, [token, setUserRole]);
+  useEffect(() => {
+    if (!token || userRole !== "Admin") {
+      navigate("/");
+    }
+  }, [token, navigate, userRole]);
 
   useEffect(() => {
     if (token) {

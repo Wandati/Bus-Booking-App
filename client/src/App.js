@@ -72,7 +72,7 @@ import PlaceById from "./components/PlaceById";
 // import Bus from "./components/Bus";
 import NotFound from "./components/NotFound";
 import SignUpForm from "./components/Signup";
-import BookingById from "./components/BookingById";
+// import BookingById from "./components/BookingById";
 import Booking from "./components/Booking";
 import Payment from "./components/Payment";
 import ADasboard from "./components/ADasboard";
@@ -108,10 +108,7 @@ function App() {
               path="/about"
               element={<About setUserRole={setUserRole} />}
             />
-             <Route
-              path="*"
-              element={<NotFound />}
-            />
+            <Route path="*" element={<NotFound />} />
             <Route
               path="/contact"
               element={<Contact setUserRole={setUserRole} />}
@@ -122,15 +119,19 @@ function App() {
             />
             <Route
               path="/admin"
-              element={<ADasboard setUserRole={setUserRole} userRole={userRole}/>}
+              element={
+                <ADasboard setUserRole={setUserRole} userRole={userRole} />
+              }
             />
             <Route
               path="/users"
-              element={<Users setUserRole={setUserRole} />}
+              element={<Users setUserRole={setUserRole} userRole={userRole} />}
             />
             <Route
               path="/users/:id"
-              element={<UsersById setUserRole={setUserRole} />}
+              element={
+                <UsersById setUserRole={setUserRole} userRole={userRole} />
+              }
             />
             {/* <Route path="/buses" element={<Bus setUserRole={setUserRole} />} /> */}
             <Route
@@ -164,10 +165,10 @@ function App() {
               path="/bookings/"
               element={<Booking setUserRole={setUserRole} />}
             />
-            <Route
+            {/* <Route
               path="/bookings/:id"
               element={<BookingById setUserRole={setUserRole} />}
-            />
+            /> */}
             <Route path="/signup" element={<SignUpForm />} />
           </Routes>
         </div>
