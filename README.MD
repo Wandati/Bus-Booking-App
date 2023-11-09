@@ -19,7 +19,9 @@ This repository contains all the code necessary to run a bus booking website. Wi
 
   1. Git clone the repository
   2. Open it in vscode
-  3. Run the following commands:
+  3. Create a virtual environment (optional but recommended)
+  4. Install the dependencies
+  5. Run the app
 
 ## Programming Languages Used
   1. JavaScript(React)🤖
