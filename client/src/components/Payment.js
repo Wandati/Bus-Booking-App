@@ -7,7 +7,7 @@ function Payment({userRole,setUserRole}) {
   const { id } = useParams();
   useEffect(() => {
     if (token) {
-      fetch("http://127.0.0.1:5500/check_user", {
+      fetch("https://bus-tracker.onrender.com/check_user", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -32,7 +32,7 @@ function Payment({userRole,setUserRole}) {
     }
   }, [token, navigate, userRole]);
   const handlePayment = () => {
-    fetch(`http://127.0.0.1:5500/confirm_booking?booking_id=${id}`, {
+    fetch(`https://bus-tracker.onrender.com/confirm_booking?booking_id=${id}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
