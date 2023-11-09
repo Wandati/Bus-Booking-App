@@ -10,7 +10,7 @@ function Booking({ setUserRole }) {
   const token = localStorage.getItem("token");
   useEffect(() => {
     if (token) {
-      fetch("http://127.0.0.1:5500/check_user", {
+      fetch("https://bus-tracker.onrender.com/check_user", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -27,7 +27,7 @@ function Booking({ setUserRole }) {
     }
   }, [token, setUserRole]);
   const handleDelete = (id) => {
-    fetch(`http://127.0.0.1:5500/bookings/${id}`, {
+    fetch(`https://bus-tracker.onrender.com/bookings/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -58,7 +58,7 @@ function Booking({ setUserRole }) {
     event.preventDefault();
 
     // Make an API request to update the seat number for the booking with bookingId
-    fetch(`http://127.0.0.1:5500/bookings/${bookingId}`, {
+    fetch(`https://bus-tracker.onrender.com/bookings/${bookingId}`, {
       method: "PUT", // Assuming you have a PUT endpoint for updating bookings
       headers: {
         "Content-Type": "application/json",
@@ -87,7 +87,7 @@ function Booking({ setUserRole }) {
     const token = localStorage.getItem("token");
 
     if (token) {
-      fetch("http://127.0.0.1:5500/bookings", {
+      fetch("https://bus-tracker.onrender.com/bookings", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
