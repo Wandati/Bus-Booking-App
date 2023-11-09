@@ -32,14 +32,14 @@ function LoginForm({ setIsLoggedIn, setUserRole }) {
       })
         .then(async (response) => {
           if (response.status === 200) {
-            const { token, User_Role } = await response.json();
+            const { token, User_Role, Name } = await response.json();
             setUserRole(User_Role);
-            console.log(User_Role);
+            // console.log(User_Role);
+            alert(`Welcome ${Name}`);
             localStorage.setItem("token", token);
             setIsLoggedIn(true);
             navigate("/");
           } else {
-           
             setErrors("Invalid Username or Password!");
           }
         })

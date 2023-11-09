@@ -5,12 +5,10 @@ const NotFound = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Redirect to the home page after a brief delay (optional)
     const redirectTimeout = setTimeout(() => {
       navigate("/");
     }, 3000);
 
-    // Clear the timeout if the component unmounts
     return () => {
       clearTimeout(redirectTimeout);
     };

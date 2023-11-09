@@ -128,7 +128,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
-function Users({ setUserRole,userRole }) {
+function Users({ setUserRole, userRole }) {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
@@ -146,10 +146,10 @@ function Users({ setUserRole,userRole }) {
         .then((res) => res.json())
         .then((data) => {
           setUserRole(data["User_Role"]);
-          console.log(data);
+          // console.log(data);
         });
     } else {
-      console.log("Hello World");
+      // console.log("Hello World");
     }
   }, [token, setUserRole]);
   useEffect(() => {
@@ -201,7 +201,6 @@ function Users({ setUserRole,userRole }) {
 
         if (response.ok) {
           alert("User Successfully deleted...");
-          // Refresh the user list after deletion
           fetch("http://127.0.0.1:5500/users", {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -215,7 +214,6 @@ function Users({ setUserRole,userRole }) {
               setUsers(filteredUsers);
             });
         } else {
-          // Handle error scenarios, e.g., unauthorized, server errors, etc.
           console.error("Failed to delete user");
         }
       } catch (error) {

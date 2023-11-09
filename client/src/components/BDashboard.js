@@ -15,10 +15,10 @@ function BDashboard({ setUserRole }) {
         .then((res) => res.json())
         .then((data) => {
           setUserRole(data["User_Role"]);
-          console.log(data);
+          // console.log(data);
         });
     } else {
-      console.log("Hello World");
+      // console.log("Hello World");
     }
   }, [token, setUserRole]);
 
@@ -144,8 +144,10 @@ function BDashboard({ setUserRole }) {
         console.log("New Bus:", newBus);
         alert("Bus Successfully added!");
         window.location.reload();
+      } else if (response.status === 404) {
+        setErrors("Failed.Route does not exist!");
       } else {
-        console.error("Failed to add bus");
+        console.error("Failed To Add Bus");
       }
     } catch (error) {
       setErrors(error.message || "An error occurred. Please try again later.");
@@ -175,18 +177,8 @@ function BDashboard({ setUserRole }) {
 
   return (
     <div className="container text-center">
-      <h1>Buses</h1>
-      {errors && (
-        <div className="alert alert-danger alert-dismissible" role="alert">
-          {errors}
-          <button
-            type="button"
-            className="btn-close"
-            data-bs-dismiss="alert"
-            aria-label="Close"
-          ></button>
-        </div>
-      )}
+      <h1 className="mt-4">Buses</h1>
+
       <button
         onClick={() => setShowForm(true)}
         className="btn btn-outline-dark mb-3"
@@ -195,7 +187,7 @@ function BDashboard({ setUserRole }) {
       </button>
       {showForm && (
         <div>
-          <h1>Add New Bus</h1>
+          <h1 className="mt-3">Add New Bus</h1>
           {errors && <div className="alert alert-danger">{errors}</div>}
           <form onSubmit={handleSubmit}>
             <div className="mb-3">

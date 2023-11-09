@@ -49,7 +49,7 @@ class Login(Resource):
         if user and check_password_hash(user.password,password):
             token = create_access_token(identity=user.id,expires_delta=timedelta(days=7))
             blacklisted_tokens.clear()
-            return {"Message":"Login Successful!!","token":token,"User_Role":user.user_type},200
+            return {"Message":"Login Successful!!","token":token,"User_Role":user.user_type,"Name":user.username},200
         else:
             return {"Error":"Invalid Email or Password!!"},401
 class CheckUser(Resource):
@@ -403,7 +403,7 @@ class FilteredRoutes(Resource):
         end_point=request.args.get('stop').capitalize()
         route = Route.query.filter_by(start_point=start_point,end_point=end_point).first()
         if not route:
-            return {'Error':"Route Not Found"},401
+            return {'Error':"Route Not Found"},404
         route_details=[
             {
                 "route_id":route.id,

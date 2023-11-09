@@ -81,7 +81,7 @@ import UsersById from "./components/UsersById";
 import AdRoutes from "./components/AdRoutes";
 import BDashboard from "./components/BDashboard";
 import "./App.css";
-
+// import Test from "./components/Test";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState("");
@@ -117,6 +117,7 @@ function App() {
               path="/routes"
               element={<Place setUserRole={setUserRole} />}
             />
+            {/* <Route path="/test" element={<Test setUserRole={setUserRole} />} /> */}
             <Route
               path="/admin"
               element={
@@ -140,7 +141,9 @@ function App() {
             />
             <Route
               path="/ad_routes"
-              element={<AdRoutes setUserRole={setUserRole} />}
+              element={
+                <AdRoutes setUserRole={setUserRole} userRole={userRole} />
+              }
             />
             <Route
               path="/busOwner"

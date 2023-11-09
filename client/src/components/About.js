@@ -15,28 +15,38 @@ const About = ({ setUserRole }) => {
         .then((res) => res.json())
         .then((data) => {
           setUserRole(data["User_Role"]);
-          console.log(data);
+          // console.log(data);
         });
     } else {
-      console.log("Hello World");
+      // console.log("Hello World");
     }
-  }, [token,setUserRole]);
+  }, [token, setUserRole]);
+
   return (
-    <div className="text-center mb-5 mt-2">
-      <h1 className="mb-5">About Us</h1>
+    <div className="container mt-4">
+      <h2 className="text-center mb-4">About Us</h2>
       <p>
-        Welcome to our Bus Booking Service App! We strive to provide a seamless
-        and convenient bus booking experience for our users.
+        Welcome to BusTrack, your go-to platform for hassle-free bus bookings!
+        At BusTrack, we're dedicated to providing you with a seamless and
+        enjoyable travel experience. Whether you're planning a weekend getaway
+        or a long journey, we've got you covered.
       </p>
-
       <p>
-        With our app, you can easily search for bus routes, check for seat
-        availability and make secure online bookings.
+        Our mission is to simplify bus travel by offering a user-friendly online
+        booking system. With a wide network of bus operators, we ensure
+        availability, convenience, and safety for every passenger. We pride
+        ourselves on reliable service and affordable fares.
       </p>
-
       <p>
-        Feel free to reach out to us if you have any questions or feedback. Your
-        Travel, Our Priority!!
+        At BusTrack, we value your time and comfort. Our easy-to-use website and
+        mobile app allow you to browse routes, check bus schedules, and secure
+        your seat with just a few clicks. We prioritize your safety and
+        well-being, partnering with trusted bus operators who adhere to
+        stringent safety standards.
+      </p>
+      <p>
+        Thank you for choosing BusTrack for your travel needs. We look forward
+        to serving you and making your journey a memorable one. Safe travels!
       </p>
     </div>
   );

@@ -665,3 +665,7 @@ div.card-body {
   text-decoration: none;
   cursor: pointer;
 }
+.smaller-image {
+  width: 150px; /* Set your desired width */
+  height: auto; /* Maintain aspect ratio */
+}

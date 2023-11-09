@@ -20,7 +20,7 @@ function Payment({userRole,setUserRole}) {
           console.log(data);
         });
     } else {
-      console.log("Hello World");
+      // console.log("Hello World");
     }
   }, [token,setUserRole]);
 

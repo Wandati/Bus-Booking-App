@@ -17,10 +17,10 @@ function Place({setUserRole}) {
         .then((res) => res.json())
         .then((data) => {
           setUserRole(data["User_Role"]);
-          console.log(data);
+          // console.log(data);
         });
     } else {
-      console.log("Hello World");
+      // console.log("Hello World");
     }
   }, [token,setUserRole]);
 

@@ -37,7 +37,7 @@ function SignUpForm() {
       })
         .then((response) => {
           if (response.status === 201) {
-            alert("Login Successful..");
+            alert("Signup Successful..");
             navigate("/login");
           } else if (response.status === 401) {
             setError("Username already exists...");

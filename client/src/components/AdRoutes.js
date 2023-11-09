@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-function AdRoutes({ setUserRole,userRole }) {
-  const navigate=useNavigate()
+function AdRoutes({ setUserRole, userRole }) {
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
   useEffect(() => {
     if (token) {
@@ -15,10 +15,10 @@ function AdRoutes({ setUserRole,userRole }) {
         .then((res) => res.json())
         .then((data) => {
           setUserRole(data["User_Role"]);
-          console.log(data);
+          // console.log(data);
         });
     } else {
-      console.log("Hello World");
+      // console.log("Hello World");
     }
   }, [token, setUserRole]);
   useEffect(() => {

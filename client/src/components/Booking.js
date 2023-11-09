@@ -20,12 +20,12 @@ function Booking({ setUserRole }) {
         .then((res) => res.json())
         .then((data) => {
           setUserRole(data["User_Role"]);
-          console.log(data);
+          // console.log(data);
         });
     } else {
-      console.log("Hello World");
+      // console.log("Hello World");
     }
-  }, [token,setUserRole]);
+  }, [token, setUserRole]);
   const handleDelete = (id) => {
     fetch(`http://127.0.0.1:5500/bookings/${id}`, {
       method: "DELETE",
@@ -104,7 +104,7 @@ function Booking({ setUserRole }) {
         .then((data) => {
           if (data && data.bookings) {
             setBookings(data.bookings);
-            console.log(data.bookings);
+            // console.log(data.bookings);
           } else {
             console.log("No Data Found");
           }
@@ -123,7 +123,7 @@ function Booking({ setUserRole }) {
   if (bookings.length === 0) {
     return (
       <>
-        <h1 className="text-center">No bookings Found...</h1>
+        <h1 className="text-center mt-4">No bookings Found...</h1>
         <p className="text-center">
           Make A Booking{" "}
           <Link className="text-decoration-none text-dark" to="/routes">
