@@ -5,7 +5,7 @@ function BDashboard({ setUserRole }) {
   const token = localStorage.getItem("token");
   useEffect(() => {
     if (token) {
-      fetch("http://127.0.0.1:5500/check_user", {
+      fetch("https://bus-tracker.onrender.com/check_user", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -37,7 +37,7 @@ function BDashboard({ setUserRole }) {
   useEffect(() => {
     // Fetch data on component mount
     if (token) {
-      fetch("http://127.0.0.1:5500/buses", {
+      fetch("https://bus-tracker.onrender.com/buses", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -85,7 +85,7 @@ function BDashboard({ setUserRole }) {
     if (busToUpdate) {
       try {
         const response = await fetch(
-          `http://127.0.0.1:5500/buses/${busToUpdate.id}`,
+          `https://bus-tracker.onrender.com/buses/${busToUpdate.id}`,
           {
             method: "PATCH",
             headers: {
@@ -123,7 +123,7 @@ function BDashboard({ setUserRole }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://127.0.0.1:5500/buses", {
+      const response = await fetch("https://bus-tracker.onrender.com/buses", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -159,7 +159,7 @@ function BDashboard({ setUserRole }) {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://127.0.0.1:5500/buses/${id}`, {
+      const response = await fetch(`https://bus-tracker.onrender.com/buses/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

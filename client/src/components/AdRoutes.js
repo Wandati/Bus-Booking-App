@@ -5,7 +5,7 @@ function AdRoutes({ setUserRole, userRole }) {
   const token = localStorage.getItem("token");
   useEffect(() => {
     if (token) {
-      fetch("http://127.0.0.1:5500/check_user", {
+      fetch("https://bus-tracker.onrender.com/check_user", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -63,8 +63,8 @@ function AdRoutes({ setUserRole, userRole }) {
     try {
       const response = await fetch(
         id
-          ? `http://127.0.0.1:5500/routes/${id}`
-          : "http://127.0.0.1:5500/routes",
+          ? `https://bus-tracker.onrender.com/routes/${id}`
+          : "https://bus-tracker.onrender.com/routes",
         {
           method: id ? "PUT" : "POST",
           headers: {
@@ -99,7 +99,7 @@ function AdRoutes({ setUserRole, userRole }) {
   const handleDelete = async (id) => {
     if (token) {
       try {
-        const response = await fetch(`http://127.0.0.1:5500/routes/${id}`, {
+        const response = await fetch(`https://bus-tracker.onrender.com/routes/${id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -123,7 +123,7 @@ function AdRoutes({ setUserRole, userRole }) {
 
   const fetchRoutes = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:5500/routes");
+      const response = await fetch("https://bus-tracker.onrender.com/routes");
       if (response.ok) {
         const data = await response.json();
         setRoutes(data);

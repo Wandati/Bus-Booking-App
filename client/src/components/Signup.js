@@ -27,7 +27,7 @@ function SignUpForm() {
         .required("Confirm Password is required"),
     }),
     onSubmit: (values) => {
-      fetch("http://127.0.0.1:5500/sign_up", {
+      fetch("https://bus-tracker.onrender.com/sign_up", {
         // Use the correct endpoint URL
         method: "POST",
         headers: {

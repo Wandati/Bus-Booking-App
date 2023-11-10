@@ -10,7 +10,7 @@ function UsersById({ setUserRole, userRole }) {
   const [errors, setErrors] = useState(null);
   useEffect(() => {
     if (token) {
-      fetch("http://127.0.0.1:5500/check_user", {
+      fetch("https://bus-tracker.onrender.com/check_user", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -35,7 +35,7 @@ function UsersById({ setUserRole, userRole }) {
   useEffect(() => {
     if (token) {
       // Fetch the list of users from your API endpoint
-      fetch(`http://127.0.0.1:5500/users/${id}`, {
+      fetch(`https://bus-tracker.onrender.com/users/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

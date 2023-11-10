@@ -4,7 +4,7 @@ function ContactUs({setUserRole}) {
   const token=localStorage.getItem("token")
   useEffect(() => {
     if (token) {
-      fetch("http://127.0.0.1:5500/check_user", {
+      fetch("https://bus-tracker.onrender.com/check_user", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
