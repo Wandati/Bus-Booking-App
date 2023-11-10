@@ -78,6 +78,7 @@ function Home({ setUserRole }) {
         // console.log(data);
         // console.log(data[0].route_id);
         setRouteDetails(data);
+        console.log(routeDetails);
         if (data[0].route_id) {
           navigate(`/routes/${data[0].route_id}`);
         } else {
