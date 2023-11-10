@@ -35,10 +35,18 @@ function LoginForm({ setIsLoggedIn, setUserRole }) {
             const { token, User_Role, Name } = await response.json();
             setUserRole(User_Role);
             // console.log(User_Role);
-            alert(`Welcome ${Name}`);
             localStorage.setItem("token", token);
             setIsLoggedIn(true);
-            navigate("/");
+            if (User_Role === "Customer") {
+              alert(`Welcome ${Name}`);
+              navigate("/");
+            } else if (User_Role === "BusOwner") {
+              alert(`Welcome ${Name}`);
+              navigate("/busOwner");
+            } else if (User_Role === "Admin") {
+              navigate("/admin");
+            }
+            // navigate("/");
           } else {
             setErrors("Invalid Username or Password!");
           }

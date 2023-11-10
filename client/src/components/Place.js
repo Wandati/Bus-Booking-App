@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-function Place({setUserRole}) {
+function Place({ setUserRole }) {
   const [routes, setRoutes] = useState([]);
   const [query, setQuery] = useState("");
-  const token=localStorage.getItem("token")
+  const token = localStorage.getItem("token");
   useEffect(() => {
     if (token) {
       fetch("http://127.0.0.1:5500/check_user", {
@@ -22,7 +22,7 @@ function Place({setUserRole}) {
     } else {
       // console.log("Hello World");
     }
-  }, [token,setUserRole]);
+  }, [token, setUserRole]);
 
   useEffect(() => {
     fetch("http://127.0.0.1:5500/routes")
@@ -72,14 +72,14 @@ function Place({setUserRole}) {
                   <strong>Price:</strong>
                   {route.price}.
                 </p>
-                <button className="btn btn-dark btn-sm">
-                  <Link
-                    className="text-decoration-none text-white"
-                    to={`/routes/${route.id}`}
-                  >
-                    Click Here to view the Available Buses
-                  </Link>
-                </button>
+                {/* <button className="btn btn-dark btn-sm"> */}
+                <Link
+                  className="btn btn-dark btn-sm text-decoration-none text-white"
+                  to={`/routes/${route.id}`}
+                >
+                  Click Here to view the Available Buses
+                </Link>
+                {/* </button> */}
               </div>
             </div>
           </div>
