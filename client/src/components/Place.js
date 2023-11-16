@@ -74,7 +74,7 @@ function Place({setUserRole}) {
                 </p>
                 <button className="btn btn-dark btn-sm">
                   <Link
-                    className="text-decoration-none text-white"
+                    className="btn btn-dark btn-sm text-decoration-none text-white"
                     to={`/routes/${route.id}`}
                   >
                     Click Here to view the Available Buses
