@@ -80,7 +80,7 @@ function Home({ setUserRole }) {
         // setRouteDetails(data);
         // console.log(routeDetails)
         if (data[0].route_id) {
-          setRouteDetails(data);
+          // setRouteDetails(data);
           navigate(`/routes/${data[0].route_id}`);
         } else {
           console.error("Route ID not found in the fetched data");
