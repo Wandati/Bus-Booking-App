@@ -77,9 +77,10 @@ function Home({ setUserRole }) {
         const data = await response.json();
         // console.log(data);
         // console.log(data[0].route_id);
-        setRouteDetails(data);
+        // setRouteDetails(data);
         // console.log(routeDetails)
         if (data[0].route_id) {
+          setRouteDetails(data);
           navigate(`/routes/${data[0].route_id}`);
         } else {
           console.error("Route ID not found in the fetched data");
