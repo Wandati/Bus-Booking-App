@@ -353,7 +353,7 @@ function Home({ setUserRole }) {
                   <button
                     type="button"
                     className="btn-close"
-                    data-bs-dismiss="alert"
+                    onClick={() => setError("")}
                     aria-label="Close"
                   ></button>
                 </div>
