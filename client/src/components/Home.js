@@ -8,7 +8,7 @@ function Home({ setUserRole }) {
   const [destination, setDestination] = useState("");
   const [pickupLocations, setPickupLocations] = useState([]);
   const [destinations, setDestinations] = useState([]);
-  const [routeDetails, setRouteDetails] = useState([]);
+  // const [routeDetails, setRouteDetails] = useState([]);
   const token = localStorage.getItem("token");
   // const[role,setRole]=useState('')
   const [error, setError] = useState("");
@@ -73,12 +73,16 @@ function Home({ setUserRole }) {
       const response = await fetch(
         `http://127.0.0.1:5500/routes/?start=${start}&stop=${stop}`
       );
+      // if (!mountedRef.current) {
+      //   return;
+      // }
       if (response.ok) {
         const data = await response.json();
         // console.log(data);
         // console.log(data[0].route_id);
-        setRouteDetails(data);
+        // setRouteDetails(data);
         if (data[0].route_id) {
+          console.log("Navigating to:", `/routes/${data[0].route_id}`);
           navigate(`/routes/${data[0].route_id}`);
         } else {
           console.error("Route ID not found in the fetched data");
@@ -95,6 +99,14 @@ function Home({ setUserRole }) {
       console.error("Error fetching data:", error);
     }
   };
+  // const mountedRef = useRef(true);
+
+  // useEffect(() => {
+  //   // Set the mounted state to false when the component is unmounted
+  //   return () => {
+  //     mountedRef.current = false;
+  //   };
+  // }, []);
 
   return (
     <>
@@ -195,11 +207,25 @@ function Home({ setUserRole }) {
             <button
               type="button"
               className="btn-close"
+              onClick={() => setError("")}
+              aria-label="Close"
+            >
+              {/* <span aria-hidden="true">&times;</span> */}
+            </button>
+          </div>
+        )}
+
+        {/* {error && (
+          <div className="alert alert-danger alert-dismissible" role="alert">
+            {error}{" "}
+            <button
+              type="button"
+              className="btn-close"
               data-bs-dismiss="alert"
               aria-label="Close"
             ></button>
           </div>
-        )}
+        )} */}
         <form onSubmit={(e) => fetchRouteDetails(e)}>
           <div className="mb-3">
             <label htmlFor="select-from" className="form-label">
