@@ -8,6 +8,9 @@ function Navbar({ isLoggedIn, setIsLoggedIn, userRole }) {
     setIsLoggedIn(false);
     navigate("/");
   };
+  const handleClick = () => {
+    console.log("clicked");
+  };
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
@@ -22,10 +25,14 @@ function Navbar({ isLoggedIn, setIsLoggedIn, userRole }) {
           aria-controls="navbarSupportedContent"
           aria-expanded="false"
           aria-label="Toggle navigation"
+          onClick={() => handleClick()}
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+        <div
+          className="collapse navbar-collapse full-screen-menu"
+          id="navbarSupportedContent"
+        >
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
               <Link to="/routes" className="nav-link active">
@@ -117,5 +124,4 @@ function Navbar({ isLoggedIn, setIsLoggedIn, userRole }) {
     </nav>
   );
 }
-
 export default Navbar;

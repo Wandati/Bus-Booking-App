@@ -8,7 +8,7 @@ function Home({ setUserRole }) {
   const [destination, setDestination] = useState("");
   const [pickupLocations, setPickupLocations] = useState([]);
   const [destinations, setDestinations] = useState([]);
-  const [routeDetails, setRouteDetails] = useState([]);
+  // const [routeDetails, setRouteDetails] = useState([]);
   const token = localStorage.getItem("token");
   // const[role,setRole]=useState('')
   const [error, setError] = useState("");
@@ -100,8 +100,8 @@ function Home({ setUserRole }) {
 
   return (
     <>
-      <div className="container text-center">
-        <h5 className="mt-3">
+      <div className="container text-center mt-5">
+        <h5 className="mt-3 ">
           Welcome to BusTrack, our easy and convenient bus booking service!
           Whether you're planning a weekend getaway or a longer trip, we've got
           you covered. Choose from various pickup locations, including popular
@@ -197,7 +197,8 @@ function Home({ setUserRole }) {
             <button
               type="button"
               className="btn-close"
-              data-bs-dismiss="alert"
+              onClick={() => setError("")}
+              // data-bs-dismiss="alert"
               aria-label="Close"
             ></button>
           </div>
